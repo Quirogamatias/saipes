@@ -36,7 +36,7 @@ class FormularioUsuario(forms.ModelForm):
 
     class Meta:
         model = Usuario
-        fields = ('email','username','nombres','apellidos')
+        fields = ('email','username','nombres','apellidos','tipo')
         widgets = {
             'email': forms.EmailInput(
                 attrs = {
@@ -60,6 +60,11 @@ class FormularioUsuario(forms.ModelForm):
                 attrs = {
                     'class': 'form-control',
                     'placeholder': 'Ingrese su nombre de usuario',
+                }
+            ),
+            'tipo': forms.Select(
+                attrs={
+                    'class': 'form-control'
                 }
             )
         }

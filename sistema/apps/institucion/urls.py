@@ -13,6 +13,10 @@ urlpatterns = [
     path('inicio_materia/',InicioMateria.as_view(), name = 'inicio_materia'),
     path('inicio_notas/',InicioNotas.as_view(), name = 'inicio_notas'),
     path('inicio_profesor/',InicioProfesor.as_view(), name = 'inicio_profesor'),
+    path('inicio_asistencia/',InicioAsistencia.as_view(), name = 'inicio_asistencia'),
+    path('inicio_fecha/',InicioFecha.as_view(), name = 'inicio_fecha'),
+    path('inicio_promedioasistencia/',InicioPromedioAsistencia.as_view(), name = 'inicio_promedioasistencia'),
+
     path('crear_curso/',login_required(CrearCurso.as_view()), name = 'crear_curso'),
     path('crear_horario/',login_required(CrearHorario.as_view()), name = 'crear_horario'),
     path('crear_alumno/',login_required(CrearAlumno.as_view()), name = 'crear_alumno'),
@@ -22,6 +26,9 @@ urlpatterns = [
     path('crear_materia/',login_required(CrearMateria.as_view()), name = 'crear_materia'),
     path('crear_notas/',login_required(CrearNotas.as_view()), name = 'crear_notas'),
     path('crear_carrera/',login_required(CrearCarrera.as_view()), name = 'crear_carrera'),
+    path('crear_asistencia/',login_required(CrearAsistencia.as_view()), name = 'crear_asistencia'),
+    path('crear_fecha/',login_required(CrearFecha.as_view()), name = 'crear_fecha'),
+    
     path('listar_cursos/',login_required(ListadoCursos.as_view()),name = 'listado_cursos'),
     path('listar_horarios/',login_required(ListadoHorarios.as_view()),name = 'listado_horarios'),
     path('listar_alumnos/',login_required(ListadoAlumnos.as_view()),name = 'listado_alumnos'),
@@ -31,6 +38,11 @@ urlpatterns = [
     path('listar_materias/',login_required(ListadoMaterias.as_view()),name = 'listado_materias'),
     path('listar_notas/',login_required(ListadoNotas.as_view()),name = 'listado_notas'),
     path('listar_carreras/',login_required(ListadoCarreras.as_view()),name = 'listado_carreras'),
+    path('listar_asistencias/',login_required(ListadoAsistencia.as_view()),name = 'listado_asistencias'),
+    path('listar_fechas/',login_required(ListadoFecha.as_view()),name = 'listado_fechas'),
+    path('listar_porcentajes/',login_required(ListadoPromedioAsistencia.as_view()),name = 'listado_porcentajes'),
+    path('porcentaje/',login_required(Porcentaje.as_view()),name = 'porcentaje'),
+   
     path('editar_curso/<int:pk>/',login_required(ActualizarCurso.as_view()),name = 'editar_curso'),
     path('editar_horario/<int:pk>/',login_required(ActualizarHorario.as_view()),name = 'editar_horario'),
     path('editar_alumno/<int:pk>/',login_required(ActualizarAlumno.as_view()),name = 'editar_alumno'),
@@ -40,6 +52,9 @@ urlpatterns = [
     path('editar_materia/<int:pk>/',login_required(ActualizarMateria.as_view()),name = 'editar_materia'),
     path('editar_notas/<int:pk>/',login_required(ActualizarNotas.as_view()),name = 'editar_notas'),
     path('editar_carrera/<int:pk>/',login_required(ActualizarCarrera.as_view()),name = 'editar_carrera'),
+    path('editar_asistencia/<int:pk>/',login_required(ActualizarAsistencia.as_view()),name = 'editar_asistencia'),
+    path('editar_fecha/<int:pk>/',login_required(ActualizarFecha.as_view()),name = 'editar_fecha'),
+    
     path('eliminar_curso/<int:pk>/',login_required(EliminarCurso.as_view()),name = 'eliminar_curso'),
     path('eliminar_horario/<int:pk>/',login_required(EliminarHorario.as_view()),name = 'eliminar_horario'),
     path('eliminar_alumno/<int:pk>/',login_required(EliminarAlumno.as_view()),name = 'eliminar_alumno'),
@@ -49,6 +64,14 @@ urlpatterns = [
     path('eliminar_materia/<int:pk>/',login_required(EliminarMateria.as_view()),name = 'eliminar_materia'),
     path('eliminar_notas/<int:pk>/',login_required(EliminarNotas.as_view()),name = 'eliminar_notas'),
     path('eliminar_carrera/<int:pk>/',login_required(EliminarCarrera.as_view()),name = 'eliminar_carrera'),
+    path('eliminar_asistencia/<int:pk>/',login_required(EliminarAsistencia.as_view()),name = 'eliminar_asistencia'),
+    path('eliminar_fecha/<int:pk>/',login_required(EliminarFecha.as_view()),name = 'eliminar_fecha'),
     
-    
+    path('detalle_carrera/<int:pk>/',login_required(DetalleCarrera.as_view()), name = 'detalle_carrera'),
+    path('listar_materia_alumno/',login_required(ListadoMateriaAlumno.as_view()),name = 'listar_materia_alumno'),
+    path('detalle_materia/<int:pk>/',login_required(DetalleMateria.as_view()), name = 'detalle_materia'),
+    path('detalle_inscripcion/<int:pk>/',login_required(DetalleInscripcion.as_view()), name = 'detalle_inscripcion'),
+    path('detalle_alumno/<int:pk>/',login_required(DetalleAlumno.as_view()), name = 'detalle_alumno'),
+    path('asistencia_materia/<int:pk>/',login_required(AsistenciaMateria.as_view()), name = 'asistencia_materia'),
+   
 ]

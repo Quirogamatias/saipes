@@ -14,11 +14,19 @@
                 <strong class="card-title">Listado de Usuarios</strong>
             </div>
             <div class="col-md-4">
-                <button type="button" class="btn btn-primary" onclick="abrir_modal_creacion('{% url 'usuarios:registrar_usuario' %}');"> REGISTRAR USUARIO ALUMNO</button>
+                <button type="button" class="btn btn-primary" onclick="abrir_modal_creacion('{% url 'usuarios:registrar_usuario' %}');"> REGISTRAR USUARIO</button>
             </div>
-        </div>
-        
+            <div class="col-md-4">
+                <button type="button" class="btn btn-primary" onclick="location.href='{% url 'usuarios:listado_usuario_alumnos' %}'" >Listado de Alumnos</button>                               
+            </div>
+            <div class="col-md-4">
+                <button type="button" class="btn btn-primary" onclick="location.href='{% url 'usuarios:listado_usuario_profesor' %}'" >Listado de Profesor</button>                               
+            </div>
+            <a href=""></a>
+        </div>               
     </div>
+    
+
     <div class="table-stats order-table ov-h">
         <table id="tabla_usuarios" class="table">
             <thead>

@@ -17,10 +17,15 @@ function listadoAlumnos(){
                 fila += '<td>' + response[i]["fields"]['email'] + '</td>';
                 fila += '<td>' + response[i]["fields"]['domicilio'] + '</td>';
                 fila += '<td>' + response[i]["fields"]['telefono'] + '</td>';
-                if (response[i]["fields"]['id_horario'] == ''){
+                if (response[i]["fields"]['id_carrera'] == ''){
                     fila += '<td> Desconocido </td>';
                 } else {
-                    fila += '<td>' + response[i]["fields"]['id_horario'] + '</td>';       
+                    fila += '<td>' + response[i]["fields"]['id_carrera'] + '</td>';       
+                }
+                if (response[i]["fields"]['usuario'] == ''){
+                    fila += '<td> Desconocido </td>';
+                } else {
+                    fila += '<td>' + response[i]["fields"]['usuario'] + '</td>';       
                 }
                 fila += '<td> <button type = "button" class = "btn btn-primary btn-sm tableButton"';
                 fila += ' onclick = "abrir_modal_edicion(\'/institucion/editar_alumno/' + response[i]['pk']+'/\');"> EDITAR </button>';

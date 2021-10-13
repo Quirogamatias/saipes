@@ -14,7 +14,6 @@ function listadoHorarios(){
                 fila += '<td>' + response[i]["fields"]['dia'] + '</td>';
                 fila += '<td>' + response[i]["fields"]['hora_inicio'] + '</td>';
                 fila += '<td>' + response[i]["fields"]['hora_fin'] + '</td>';
-                fila += '<td>' + response[i]["fields"]['asistencia'] + '</td>';
                 if (response[i]["fields"]['id_curso'] == ''){
                     fila += '<td> Desconocido </td>';
                 } else {

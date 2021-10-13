@@ -11,16 +11,19 @@ function listadoCarrera(){
             for(let i = 0;i < response.length;i++){
                 let fila = '<tr>';
                 fila += '<td>' + (i+1) + '</td>';
-                fila += '<td>' + response[i]["fields"]['carrera'] + '</td>';
+                fila += '<td>' + response[i]["fields"]['carrera'] + '</td>';                      
                 if (response[i]["fields"]['id_materia'] == ''){
                     fila += '<td> Desconocido </td>';
                 } else {
-                    fila += '<td>' + response[i]["fields"]['id_materia'] + '</td>';       
-                }
+                    fila += '<td>' + response[i]["fields"]['id_materia'] + '</td>';
+                }                
                 fila += '<td> <button type = "button" class = "btn btn-primary btn-sm tableButton"';
                 fila += ' onclick = "abrir_modal_edicion(\'/institucion/editar_carrera/' + response[i]['pk']+'/\');"> EDITAR </button>';
                 fila += '<button type = "button" class = "btn btn-danger tableButton btn-sm"';
-                fila += 'onclick = "abrir_modal_eliminacion(\'/institucion/eliminar_carrera/'+ response[i]['pk']+'/\');"> ELIMINAR </button> </td>';
+                fila += 'onclick = "abrir_modal_eliminacion(\'/institucion/eliminar_carrera/'+ response[i]['pk']+'/\');"> ELIMINAR </button> ';
+                fila += '<button type = "button" class = "btn btn-info tableButton btn-sm"';
+                fila += 'onclick="location.href=(\'/institucion/detalle_carrera/'+ response[i]['pk']+'/\');"> DETALLE </button> </td>';
+                
                 fila += '</tr>';
                 $('#tabla_carreras tbody').append(fila);
             }             
@@ -52,6 +55,8 @@ function listadoCarrera(){
         }
     });
 }
+
+
 function registrar() {
     activarBoton();
     var data = new FormData($('#form_creacion').get(0));
@@ -97,13 +102,14 @@ function editar() {
     });
 }
 function eliminar(pk){
-	$.ajax({
+	$.ajax({        
         data: {
             csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
         },
-		url: '/institucion/carrera/eliminar_carrera/'+pk+'/',
-		type: 'post',
+		url: '/institucion/eliminar_carrera/'+pk+'/',
+		type: 'post',        
 		success: function(response) {
+            console.log(pk);
             notificacionSuccess(response.mensaje);
 			listadoCarrera();
 			cerrar_modal_eliminacion();
@@ -113,6 +119,8 @@ function eliminar(pk){
 		}
 	});
 }
+
 $(document).ready(function(){
     listadoCarrera();
 });
+

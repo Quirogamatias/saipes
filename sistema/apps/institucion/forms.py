@@ -24,7 +24,7 @@ class CursoForm(forms.ModelForm):
                     'placeholder':'Ingrese la capacidad del curso'
                 }
             ),
-            'turno':forms.TextInput(
+            'turno':forms.Select(
                 attrs = {
                     'class':'form-control',
                 }
@@ -39,20 +39,18 @@ class HorarioForm(forms.ModelForm):
 
     class Meta:
         model = Horario
-        fields = ['dia','hora_inicio','hora_fin','asistencia','id_curso']
+        fields = ['dia','hora_inicio','hora_fin','id_curso']
         labels = {
             'dia': 'dia',
             'hora_inicio': 'hora de inico',
             'hora_fin': 'hora de fin',
-            'asistencia': 'asistencia ',
-            'id_curso': 'id del curso',
+            'id_curso': 'curso',
 
         }
         widgets = {
-            'dia': forms.TextInput(
+            'dia': forms.Select(
                 attrs = {
-                    'class':'form-control',
-                    'placeholder':'Ingrese el dia del horario'
+                    'class':'form-control'
                 }
             ),
             'hora_inicio': forms.TextInput(
@@ -67,13 +65,7 @@ class HorarioForm(forms.ModelForm):
                     'placeholder':'Ingrese el horario de finalizacion'
                 }
             ),
-            'asistencia':forms.TextInput(
-                attrs = {
-                    'class':'form-control',
-                    'placeholder':'Ingrese la asistencia'
-                }
-            ),
-            'id_curso':forms.TextInput(
+            'id_curso':forms.Select(
                 attrs = {
                     'class':'form-control'
                 }
@@ -84,11 +76,11 @@ class AlumnoForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['id_horario'].queryset = Horario.objects.filter(estado = True)
+        self.fields['id_carrera'].queryset = Carrera.objects.filter(estado = True)
 
     class Meta:
         model = Alumno
-        fields = ['dni','nombre','apellido','email','domicilio','telefono','id_horario']
+        fields = ['dni','nombre','apellido','email','domicilio','telefono','id_carrera','usuario']
         labels = {
             'dni': 'dni del alumno',
             'nombre': 'nombre del alumno',
@@ -96,8 +88,8 @@ class AlumnoForm(forms.ModelForm):
             'email': 'email el alumno ',
             'domicilio': 'domicilio del alumno',
             'telefono': 'telefono del alumno',
-            'id_horario': 'horario del Alumno',
-            'id_usuario': 'usuario del Alumno',
+            'id_carrera': 'carrera del Alumno',
+            'usuario': 'usuario del Alumno',
 
         }
         widgets = {
@@ -138,10 +130,14 @@ class AlumnoForm(forms.ModelForm):
                     'placeholder':'Ingrese el telefono del alumno'
                 }
             ),
-            'id_horario':forms.TextInput(
+            'id_carrera':forms.SelectMultiple(
                 attrs = {
                     'class':'form-control',
-                    'placeholder':'Ingrese el id_horario del alumno'
+                }
+            ),
+            'usuario':forms.Select(
+                attrs = {
+                    'class':'form-control',
                 }
             )
         }
@@ -151,15 +147,15 @@ class InscripcionForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['id_alumno'].queryset = Alumno.objects.filter(estado = True)
-        self.fields['id_curso'].queryset = Curso.objects.filter(estado = True)
+        self.fields['id_materia'].queryset = Materia.objects.filter(estado = True)
 
     class Meta:
         model = Inscripcion
-        fields = ['fecha_inscripcion','id_alumno','id_curso']
+        fields = ['fecha_inscripcion','id_alumno','id_materia']
         labels = {
             'fecha_inscripcion': 'fecha_inscripcion',
             'id_alumno': 'id_alumno',
-            'id_curso': 'id_curso',
+            'id_materia': 'id_materia',
 
         }
         widgets = {
@@ -169,19 +165,20 @@ class InscripcionForm(forms.ModelForm):
                     'placeholder':'Ingrese la fecha de inscripcion'
                 }
             ),
-            'id_alumno': forms.TextInput(
+            'id_alumno': forms.Select(
                 attrs = {
-                    'class':'form-control'
+                    'class':'form-control',
                 }
             ),
-            'id_curso':forms.TextInput(
+            'id_materia':forms.Select(
                 attrs = {
-                    'class':'form-control'
+                    'class':'form-control',
                 }
             )            
         }
 
 class AdministradorForm(forms.ModelForm):
+
     class Meta:
         model = Administrador
         fields = ['nombre','apellido','telefono','domicilio','email']
@@ -223,7 +220,7 @@ class AdministradorForm(forms.ModelForm):
                     'class':'form-control',
                     'placeholder':'Ingrese el email del administrador'
                 }
-            )
+            )          
         }
 
 
@@ -231,11 +228,11 @@ class ProfesorForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['id_horario'].queryset = Horario.objects.filter(estado = True)
+        self.fields['id_materia'].queryset = Materia.objects.filter(estado = True)
 
     class Meta:
         model = Profesor
-        fields = ['dni','nombre','apellido','email','domicilio','telefono','id_horario']
+        fields = ['dni','nombre','apellido','email','domicilio','telefono','id_materia','usuario']
         labels = {
             'dni': 'dni del profesor',
             'nombre': 'nombre del profesor',
@@ -243,7 +240,8 @@ class ProfesorForm(forms.ModelForm):
             'email': 'email del profesor ',
             'domicilio': 'domicilio del profesor',
             'telefono': 'telefono del profesor',
-            'id_horario': 'id de horario del profesor',
+            'id_materia': 'id de la materia del profesor',
+            'usuario': 'usuario del profesor',
 
         }
         widgets = {
@@ -283,7 +281,12 @@ class ProfesorForm(forms.ModelForm):
                     'placeholder':'Ingrese el telefono del profesor'
                 }
             ),
-            'id_horario':forms.TextInput(
+            'id_materia':forms.SelectMultiple(
+                attrs = {
+                    'class':'form-control'
+                }
+            ),
+            'usuario':forms.Select(
                 attrs = {
                     'class':'form-control'
                 }
@@ -301,7 +304,7 @@ class MateriaForm(forms.ModelForm):
         fields = ['materia','id_horario']
         labels = {
             'materia': 'materia',
-            'id_horario': 'id_horario de la materia',
+            'id_horario': 'horario de la materia'
 
         }
         widgets = {
@@ -311,7 +314,7 @@ class MateriaForm(forms.ModelForm):
                     'placeholder':'Ingrese la materia'
                 }
             ),
-            'id_horario': forms.TextInput(
+            'id_horario': forms.SelectMultiple(
                 attrs = {
                     'class':'form-control'
                 }
@@ -343,12 +346,12 @@ class NotasForm(forms.ModelForm):
                     'placeholder':'Ingrese las notas'
                 }
             ),
-            'id_materia': forms.TextInput(
+            'id_materia': forms.Select(
                 attrs = {
                     'class':'form-control'
                 }
             ),
-            'id_alumno':forms.TextInput(
+            'id_alumno':forms.Select(
                 attrs = {
                     'class':'form-control'
                 }
@@ -377,10 +380,101 @@ class CarreraForm(forms.ModelForm):
                     'placeholder':'Ingrese la carrera'
                 }
             ),
-            'id_materia': forms.TextInput(
+            'id_materia': forms.SelectMultiple(
                 attrs = {
                     'class':'form-control'
                 }
             )
         }
         
+class AsistenciaForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['id_materia'].queryset = Materia.objects.filter(estado = True)
+        self.fields['id_alumno'].queryset = Alumno.objects.filter(estado = True)
+
+    class Meta:
+        model = Asistencia
+        fields = ['id_materia','id_alumno','dia','asistencia']
+        labels = {
+            'id_materia': 'id_materia',
+            'id_alumno': 'id_alumno',
+            'dia': 'dia',
+            'asistencia': 'asistencia',
+
+        }
+        widgets = {
+            'id_materia': forms.Select(
+                attrs = {
+                    'class':'form-control',
+                }
+            ),
+            'id_alumno': forms.Select(
+                attrs = {
+                    'class':'form-control'
+                }
+            ),
+            'dia': forms.SelectDateWidget(
+                attrs = {
+                    'class':'form-control',
+                }
+            ),
+            'asistencia':forms.Select(
+                attrs = {
+                    'class':'form-control',
+                }
+            )            
+        }
+
+class FechaForm(forms.ModelForm):
+
+    class Meta:
+        model = Fecha
+        fields = ['fecha_evento','evento']
+        labels = {
+            'fecha_evento': 'fecha de evento',
+            'evento': 'horario de la materia'
+
+        }
+        widgets = {
+            'fecha_evento': forms.SelectDateWidget(
+                attrs = {
+                    'class':'form-control',
+                }
+            ),
+            'evento': forms.TextInput(
+                attrs = {
+                    'class':'form-control',                    
+                    'placeholder':'Ingrese el evento de la Fecha'
+                }
+            )
+        }
+
+class PromedioAsistenciaForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['id_materia'].queryset = Materia.objects.filter(estado = True)
+        self.fields['id_alumno'].queryset = Alumno.objects.filter(estado = True)
+        
+    class Meta:
+        model = PromedioAsistencia
+        fields = ['id_materia','id_alumno']
+        labels = {
+            'id_materia': 'id_materia',
+            'id_alumno': 'id_alumno',
+
+        }
+        widgets = {
+            'id_materia': forms.Select(
+                attrs = {
+                    'class':'form-control',
+                }
+            ),
+            'id_alumno': forms.Select(
+                attrs = {
+                    'class':'form-control'
+                }
+            )          
+        }

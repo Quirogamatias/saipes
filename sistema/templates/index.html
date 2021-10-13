@@ -1,4 +1,5 @@
 {% load static %}
+{% load has_group %}
 <!doctype html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
@@ -85,11 +86,37 @@
                                 <i class="menu-icon fa fa-users"></i>Usuarios</a>
                             <ul class="sub-menu children dropdown-menu">  
                                 <li><i class="fa fa-id-badge"></i><a href="{% url 'usuarios:inicio_usuarios' %}">Listado de usuarios</a></li>
+                                
+                            </ul>
+                                                   
+                    </li>
+
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+                                <i class="menu-icon fa fa-users"></i>Fechas</a>
+                            <ul class="sub-menu children dropdown-menu">  
+                                <li><i class="fa fa-id-badge"></i><a href="{% url 'institucion:inicio_fecha' %}">Listado de fechas</a></li>
                             </ul>
                                                    
                     </li>
                      
                     {% endif %}
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+                                <i class="menu-icon fa fa-users"></i>Calendario</a>
+                            <ul class="sub-menu children dropdown-menu">                                 
+                                <li><i class="fa fa-id-badge"></i><a href="{% url 'usuarios:calendario' %}">Calendario</a></li>
+                            </ul>
+                                                   
+                    </li>
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+                                <i class="menu-icon fa fa-users"></i>Ejemplo</a>
+                            <ul class="sub-menu children dropdown-menu">                                 
+                                <li><i class="fa fa-id-badge"></i><a href="{% url 'usuarios:listado_usuario_alumnos' %}">Listado de usuarios Alumno</a></li>
+                            </ul>
+                                                   
+                    </li>
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Curso</a>
                         <ul class="sub-menu children dropdown-menu">                            
@@ -105,7 +132,7 @@
                             </li>
                         </ul>
                     </li> 
-                    
+                    {% if request.user.tipo == "Alumno" or request.user.is_superuser %}
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Alumno</a>
                         <ul class="sub-menu children dropdown-menu">
@@ -113,23 +140,29 @@
                             </li>
                         </ul>
                     </li> 
+                    {% endif %}
                     
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Inscripcion</a>
                         <ul class="sub-menu children dropdown-menu">
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_inscripcion' %}">Listado Inscripcion</a>
                             </li>
+                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:listar_materia_alumno' %}">Listado alumno por materia</a>
+                            </li>
                         </ul>
                     </li> 
-                    
+
+                    {% if request.user.tipo == "Administrador" or request.user.is_superuser %}
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Administrador</a>
                         <ul class="sub-menu children dropdown-menu">
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_administrador' %}">Listado Administrador</a>
                             </li>
                         </ul>
-                    </li> 
-                    
+                    </li>
+                    {% endif %} 
+
+                    {% if request.user.tipo == "Profesor" or request.user.is_superuser%}
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Profesor</a>
                         <ul class="sub-menu children dropdown-menu">
@@ -137,13 +170,17 @@
                             </li>
                         </ul>
                     </li> 
-                    
+                    {% endif %}
+
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Materia</a>
                         <ul class="sub-menu children dropdown-menu">
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_materia' %}">Listado Materia</a>
                             </li>
+                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:porcentaje' %}">Porcentaje</a>
+                            </li>
                         </ul>
+                            
                     </li> 
                     
                     <li class="menu-item-has-children dropdown">
@@ -161,6 +198,22 @@
                             </li>
                         </ul>
                     </li> 
+                    
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Asistencia</a>
+                        <ul class="sub-menu children dropdown-menu">                            
+                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_asistencia' %}">Listado Asistencia</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Promedio Asistencia</a>
+                        <ul class="sub-menu children dropdown-menu">                            
+                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_promedioasistencia' %}">Listado Promedio Asistencia</a>
+                            </li>
+                        </ul>
+                    </li> 
+                   
                     
                 </ul>
             </div><!-- /.navbar-collapse -->

@@ -20,7 +20,12 @@ function listadoMaterias(){
                 fila += '<td> <button type = "button" class = "btn btn-primary btn-sm tableButton"';
                 fila += ' onclick = "abrir_modal_edicion(\'/institucion/editar_materia/' + response[i]['pk']+'/\');"> EDITAR </button>';
                 fila += '<button type = "button" class = "btn btn-danger tableButton btn-sm"';
-                fila += 'onclick = "abrir_modal_eliminacion(\'/institucion/eliminar_materia/'+ response[i]['pk']+'/\');"> ELIMINAR </button> </td>';
+                fila += 'onclick = "abrir_modal_eliminacion(\'/institucion/eliminar_materia/'+ response[i]['pk']+'/\');"> ELIMINAR </button>';
+                fila += '<button type = "button" class = "btn btn-danger tableButton btn-sm"';
+                fila += 'onclick = "location.href=(\'/institucion/asistencia_materia/'+ response[i]['pk']+'/\');"> ASISTENCIA </button>';
+                fila += '<button type = "button" class = "btn btn-info tableButton btn-sm"';
+                fila += 'onclick="location.href=(\'/institucion/detalle_materia/'+ response[i]['pk']+'/\');"> DETALLE </button> </td>';
+                
                 fila += '</tr>';
                 $('#tabla_materias tbody').append(fila);
             }             

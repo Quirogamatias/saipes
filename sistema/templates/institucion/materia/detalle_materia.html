@@ -1,0 +1,58 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block titulo %}
+Materia | {{ materia.materia }}
+{% endblock titulo %}
+{% block extra_css %}
+{% endblock extra_css %}
+{% block body %}
+<div class="card">
+    <div class="card-header">
+        <div class="row" style="margin: 30px;">
+            <div class="col-md-12 text-center ">
+                <strong class="card-title">
+                    <h2>Materia: {{ materia.materia }}</h2>
+                </strong>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="card">
+                    {% csrf_token %}
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="card-text"><strong>Horario</strong></p>{{ materia.obtener_horarios }}
+                            </div>
+                            <p class="card-text"><strong>Alumno que cursan la materia {{ materia.materia }}: </strong></p>
+                            {% for inscripcion in inscripciones %}
+                            {% if inscripcion.id_materia == materia %}                                                       
+                            <div class="col-md-12">
+                                {% for alumno in alumnos %}
+                                {% if alumno == inscripcion.id_alumno %} 
+                                <a href="{% url 'institucion:detalle_alumno' alumno.pk %}">
+                                <p class="card-text"><strong>Alumno</strong></p>{{ inscripcion.id_alumno }}
+                                </a>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-primary btn-lg" ></button>Accion</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+{% endblock body %}
+{% block extrajs %}
+
+{% endblock extrajs %}

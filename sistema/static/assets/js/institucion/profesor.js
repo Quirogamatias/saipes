@@ -17,11 +17,16 @@ function listadoProfesores(){
                 fila += '<td>' + response[i]["fields"]['email'] + '</td>';
                 fila += '<td>' + response[i]["fields"]['domicilio'] + '</td>';
                 fila += '<td>' + response[i]["fields"]['telefono'] + '</td>';
-                if (response[i]["fields"]['id_horario'] == ''){
+                if (response[i]["fields"]['id_materia'] == ''){
                     fila += '<td> Desconocido </td>';
                 } else {
-                    fila += '<td>' + response[i]["fields"]['id_horario'] + '</td>';       
-                }                
+                    fila += '<td>' + response[i]["fields"]['id_materia'] + '</td>';       
+                }   
+                if (response[i]["fields"]['usuario'] == ''){
+                    fila += '<td> Desconocido </td>';
+                } else {
+                    fila += '<td>' + response[i]["fields"]['usuario'] + '</td>';       
+                }        
                 fila += '<td> <button type = "button" class = "btn btn-primary btn-sm tableButton"';
                 fila += ' onclick = "abrir_modal_edicion(\'/institucion/editar_profesor/' + response[i]['pk']+'/\');"> EDITAR </button>';
                 fila += '<button type = "button" class = "btn btn-danger tableButton btn-sm"';

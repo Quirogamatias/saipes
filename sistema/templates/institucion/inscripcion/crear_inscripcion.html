@@ -12,12 +12,26 @@
                 <div id="errores">
 
                 </div>
-                {{ form.as_p }}
+
+                <div class="row form-group">
+                    <div class="col col-md-3">{{ form.fecha_inscripcion.label }}</div>
+                    <div class="col-12 col-md-9">{{ form.fecha_inscripcion }}</div>
+                </div>
+                <div class="row form-group">
+                    <div class="col col-md-3">{{ form.id_alumno.label }}</div>
+                    <div class="col-12 col-md-9">{{ form.id_alumno }}</div>
+                </div>
+                <div class="row form-group">
+                    <div class="col col-md-3">{{ form.id_materia.label }}</div>
+                    <div class="col-12 col-md-9">{{ form.id_materia }}</div>
+                </div>
             </div>
+
             <div class="modal-footer">
                 <button class="btn btn-danger" type="button" onclick="cerrar_modal_creacion();">Cancelar</button>
                 <button id="boton_creacion" class="btn btn-primary" type="button" onclick="registrar();">Confirmar</button>
             </div>
+
         </form>
         
     </div>

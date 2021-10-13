@@ -1,3 +1,4 @@
+from apps.institucion.models import Alumno
 import json
 from django.shortcuts import render,redirect
 from django.urls import reverse_lazy
@@ -9,14 +10,35 @@ from django.views.generic.edit import FormView
 from django.contrib.auth import login,logout
 from django.http import HttpResponseRedirect,HttpResponse,JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin
-from django.views.generic import CreateView,ListView,UpdateView,DeleteView,TemplateView
-from apps.usuario.models import Usuario
+from django.views.generic import CreateView,ListView,UpdateView,DeleteView,TemplateView,DetailView
+from apps.usuario.models import Rol, Usuario
 from .forms import FormularioLogin,FormularioUsuario
-from apps.usuario.mixins import LoginYSuperStaffMixin,ValidarPermisosMixin
+from apps.usuario.mixins import LoginYSuperStaffMixin,ValidarPermisosMixin,LoginMixin
+from apps.institucion.models import Fecha
 
 class Inicio(LoginYSuperStaffMixin,TemplateView):
     #clase que renderiza el index del sistema
     template_name = 'index.html'
+    groups_required = ['alumno','administrador','profesor']
+
+    def get(self,request,*args,**kwargs):
+        contador = 0
+        grupos_usuario = request.user.groups.all().values('name')
+        for grupo in grupos_usuario:
+            if grupo['name'] in self.groups_required:
+                contador += 1
+        if contador == len(self.groups_required):
+            return render(request,self.template_name)
+        else:
+            print("NO ESTA DENTRO DE LOS GRUPOS")
+        # agregar un permiso
+        # usuario.user_permissions.add(permiso1,permiso2,...)
+        # usuario.user_permissions.remove(permiso1,permiso2,...)
+        # usuario.user_permissions.set([lista_permisos])
+        # usuario.user_permissions.clear()
+        
+        return render(request,self.template_name)
+
 
 class Login(FormView):
     template_name = 'login.html'
@@ -39,40 +61,37 @@ def logoutUsuario(request):
     logout(request)
     return HttpResponseRedirect('/accounts/login/')
 
-class InicioUsuarios(ValidarPermisosMixin,TemplateView):
-    template_name = 'usuarios/listar_usuario.html'
-    permission_required = ('institucion.permiso_admin')
+class InicioUsuarios(LoginYSuperStaffMixin, ValidarPermisosMixin, TemplateView):
+    template_name='usuarios/listar_usuario.html'
+    permission_required = ('usuario.view_usuario', 'usuario.add_usuario',
+                           'usuario.delete_usuario', 'usuario.change_usuario')
 
-class ListadoUsuario(ValidarPermisosMixin,ListView):
-    model = Usuario    
-    permission_required = ('institucion.permiso_admin',)
+class ListadoUsuario(LoginYSuperStaffMixin, ValidarPermisosMixin, ListView):
+    model = Usuario
+    permission_required = ('usuario.view_usuario', 'usuario.add_usuario',
+                           'usuario.delete_usuario', 'usuario.change_usuario')
 
     def get_queryset(self):
         return self.model.objects.filter(is_active=True)
-
+    
     def get(self,request,*args,**kwargs):
-        if request.is_ajax():            
-            return HttpResponse(serialize('json',self.get_queryset()), 'application/json')
+        if request.is_ajax():
+            return HttpResponse(serialize('json', self.get_queryset()), 'application/json')
         else:
             return redirect('usuarios:inicio_usuarios')
 
-class RegistrarUsuario(LoginYSuperStaffMixin,ValidarPermisosMixin,CreateView):
+class RegistrarUsuario(LoginYSuperStaffMixin, ValidarPermisosMixin, CreateView):
     model = Usuario
     form_class = FormularioUsuario
     template_name = 'usuarios/crear_usuario.html'
+    permission_required = ('usuario.view_usuario', 'usuario.add_usuario',
+                           'usuario.delete_usuario', 'usuario.change_usuario')
 
-    def post(self,request,*args,**kwargs):
+    def post(self, request, *args, **kwargs):
         if request.is_ajax():
-            form = self.form_class(request.POST)
+            form = self.form_class(data = request.POST,files= request.FILES )
             if form.is_valid():
-                nuevo_usuario = Usuario(
-                    email = form.cleaned_data.get('email'),
-                    username = form.cleaned_data.get('username'),
-                    nombres = form.cleaned_data.get('nombres'),
-                    apellidos = form.cleaned_data.get('apellidos')
-                )
-                nuevo_usuario.set_password(form.cleaned_data.get('password1'))
-                nuevo_usuario.save()
+                form.save()
                 mensaje = f'{self.model.__name__} registrado correctamente!'
                 error = 'No hay error!'
                 response = JsonResponse({'mensaje':mensaje,'error':error})
@@ -81,16 +100,18 @@ class RegistrarUsuario(LoginYSuperStaffMixin,ValidarPermisosMixin,CreateView):
             else:
                 mensaje = f'{self.model.__name__} no se ha podido registrar!'
                 error = form.errors
-                response = JsonResponse({'mensaje':mensaje,'error':error})
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
                 response.status_code = 400
                 return response
-        else: 
+        else:
             return redirect('usuarios:inicio_usuarios')
 
-class EditarUsuario(LoginYSuperStaffMixin,ValidarPermisosMixin,UpdateView):
+class EditarUsuario(LoginYSuperStaffMixin, ValidarPermisosMixin, UpdateView):
     model = Usuario
     form_class = FormularioUsuario
     template_name = 'usuarios/editar_usuario.html'
+    permission_required = ('usuario.view_usuario', 'usuario.add_usuario',
+                           'usuario.delete_usuario', 'usuario.change_usuario')
 
     def post(self,request,*args,**kwargs):
         if request.is_ajax():
@@ -99,31 +120,81 @@ class EditarUsuario(LoginYSuperStaffMixin,ValidarPermisosMixin,UpdateView):
                 form.save()
                 mensaje = f'{self.model.__name__} actualizado correctamente!'
                 error = 'No hay error!'
-                response = JsonResponse({'mensaje':mensaje,'error':error})
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
                 response.status_code = 201
                 return response
             else:
                 mensaje = f'{self.model.__name__} no se ha podido actualizar!'
                 error = form.errors
-                response = JsonResponse({'mensaje':mensaje,'error':error})
+                response = JsonResponse({'mensaje': mensaje, 'error': error})
                 response.status_code = 400
                 return response
-        else: 
+        else:
             return redirect('usuarios:inicio_usuarios')
 
-class EliminarUsuario(LoginYSuperStaffMixin,ValidarPermisosMixin,DeleteView):
+class EliminarUsuario(LoginYSuperStaffMixin, ValidarPermisosMixin, DeleteView):
     model = Usuario
     template_name = 'usuarios/eliminar_usuario.html'
+    permission_required = ('usuario.view_usuario', 'usuario.add_usuario',
+                           'usuario.delete_usuario', 'usuario.change_usuario')
 
     def delete(self,request,*args,**kwargs):
         if request.is_ajax():
             usuario = self.get_object()
             usuario.is_active = False
             usuario.save()
-            mensaje = f'{self.model.__name__} eliminacion correctamente!'
+            mensaje = f'{self.model.__name__} eliminado correctamente!'
             error = 'No hay error!'
-            response = JsonResponse({'mensaje':mensaje,'error':error})
+            response = JsonResponse({'mensaje': mensaje, 'error': error})
             response.status_code = 201
-            return response            
-        else: 
+            return response
+        else:
             return redirect('usuarios:inicio_usuarios')
+
+class ListadoUsuarioAlumno(LoginMixin,ListView):
+    model = Usuario
+    paginate_by = 6
+    permission_required = ('usuario.view_usuario', 'usuario.add_usuario',
+                           'usuario.delete_usuario', 'usuario.change_usuario')
+
+    #paginate_by = 6
+    template_name = 'usuarios/usuarios_alumno.html'
+
+    def get_queryset(self):
+        queryset = self.model.objects.filter(is_active = True,tipo__icontains = 'Alumno')
+        return queryset 
+
+class DetalleUsuarioAlumno(LoginMixin,DetailView):
+    model = Usuario
+    template_name = 'usuarios/detalle_usuario_alumno.html'
+
+    """def get(self,request,*agrs,**kwargs):
+        if self.get_object().tipo__icontains = 'Alumno':
+            return render(request,self.template_name,{'object':self.get_object()})
+        return redirect('usuario:detalle_usuario_alumno')"""
+
+class ListadoUsuarioProfesor(LoginMixin,ListView):
+    model = Usuario
+    paginate_by = 6
+    permission_required = ('usuario.view_usuario', 'usuario.add_usuario',
+                           'usuario.delete_usuario', 'usuario.change_usuario')
+
+    #paginate_by = 6
+    template_name = 'usuarios/usuarios_profesor.html'
+
+    def get_queryset(self):
+        queryset = self.model.objects.filter(is_active = True,tipo__icontains = 'Profesor')
+        return queryset 
+
+class DetalleUsuarioProfesor(LoginMixin,DetailView):
+    model = Usuario
+    template_name = 'usuarios/detalle_usuario_profesor.html'
+
+class Calendario(LoginMixin,ListView):
+    model = Fecha
+    template_name = 'usuarios/calendario.html'
+
+    def get_queryset(self):
+        queryset = self.model.objects.filter(estado = True)
+        return queryset
+

@@ -53,10 +53,14 @@ function listadoUsuarios(){
 
 function registrar() {
     activarBoton();
-    $.ajax({
-        data: $('#form_creacion').serialize(),
+    var data = new FormData($('#form_creacion').get(0));   
+    $.ajax({        
         url: $('#form_creacion').attr('action'),
-        type: $('#form_creacion').attr('method'),
+        type: $('#form_creacion').attr('method'), 
+        data: data,
+        cache: false,
+        processData: false,
+        contentType: false,
         success: function (response) {
             notificacionSuccess(response.mensaje);
             listadoUsuarios();
@@ -71,10 +75,14 @@ function registrar() {
 }
 function editar(){
     activarBoton();
-    $.ajax({
-        data: $('#form_edicion').serialize(),
-        url: $('#form_edicion').attr('action'),
-        type: $('#form_edicion').attr('method'),
+    var data = new FormData($('#form_edicion').get(0));   
+    $.ajax({        
+        url: $('#form_creacion').attr('action'),
+        type: $('#form_creacion').attr('method'), 
+        data: data,
+        cache: false,
+        processData: false,
+        contentType: false,
         success: function (response) {
             notificacionSuccess(response.mensaje);
             listadoUsuarios();
