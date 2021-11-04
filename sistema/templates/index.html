@@ -138,6 +138,8 @@
                         <ul class="sub-menu children dropdown-menu">
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_alumno' %}">Listado Alumno</a>
                             </li>
+                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:estado_alumno' %}">Estado Alumno</a>
+                            </li>
                         </ul>
                     </li> 
                     {% endif %}
@@ -146,6 +148,10 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Inscripcion</a>
                         <ul class="sub-menu children dropdown-menu">
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_inscripcion' %}">Listado Inscripcion</a>
+                            </li>
+                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_inscripcion_profesor' %}">Listado Inscripcion Profesor</a>
+                            </li>
+                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_inscripcion_examen' %}">Listado Inscripcion Examen</a>
                             </li>
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:listar_materia_alumno' %}">Listado alumno por materia</a>
                             </li>
@@ -158,6 +164,8 @@
                         <ul class="sub-menu children dropdown-menu">
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_administrador' %}">Listado Administrador</a>
                             </li>
+                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:estado_administrador' %}">Estado Administrador</a>
+                            </li>
                         </ul>
                     </li>
                     {% endif %} 
@@ -167,6 +175,8 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Profesor</a>
                         <ul class="sub-menu children dropdown-menu">
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_profesor' %}">Listado Profesor</a>
+                            </li>
+                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:estado_profesor' %}">Estado Profesor</a>
                             </li>
                         </ul>
                     </li> 
@@ -212,7 +222,24 @@
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_promedioasistencia' %}">Listado Promedio Asistencia</a>
                             </li>
                         </ul>
+                    </li>
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Promedio Notas</a>
+                        <ul class="sub-menu children dropdown-menu">                            
+                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_promedionotasfinal' %}">Listado Promedio Notas Final</a>
+                            </li>
+                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_promedionotasparcial' %}">Listado Promedio Notas Parcial</a>
+                            </li>
+                        </ul>
                     </li> 
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Enviar Mensaje</a>
+                        <ul class="sub-menu children dropdown-menu">                            
+                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:enviar_mensaje' %}">Enviar Mensaje</a>
+                            </li>
+                        </ul>
+                    </li> 
+                    
                    
                     
                 </ul>

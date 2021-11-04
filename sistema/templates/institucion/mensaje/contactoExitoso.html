@@ -1,0 +1,10 @@
+{% extends 'index.html' %}
+{% block titulo %}
+    Confirmacion de Envio
+{% endblock titulo %}
+{% block body %}
+<form method="POST">
+    {% csrf_token %}
+   <p><strong>formulario enviado exitosamente</strong></p>
+</form>
+{% endblock body %}

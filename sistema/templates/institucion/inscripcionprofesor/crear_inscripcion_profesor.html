@@ -1,0 +1,38 @@
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Creacion de Inscripcion </h2>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form id="form_creacion" action="{% url 'institucion:crear_inscripcion_profesor' %}" method="POST">
+            {% csrf_token %}
+            <div class="modal-body">
+                <div id="errores">
+
+                </div>
+
+                <div class="row form-group">
+                    <div class="col col-md-3">{{ form.fecha_inscripcion.label }}</div>
+                    <div class="col-12 col-md-9">{{ form.fecha_inscripcion }}</div>
+                </div>
+                <div class="row form-group">
+                    <div class="col col-md-3">{{ form.id_profesor.label }}</div>
+                    <div class="col-12 col-md-9">{{ form.id_profesor }}</div>
+                </div>
+                <div class="row form-group">
+                    <div class="col col-md-3">{{ form.id_materia.label }}</div>
+                    <div class="col-12 col-md-9">{{ form.id_materia }}</div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" onclick="cerrar_modal_creacion();">Cancelar</button>
+                <button id="boton_creacion" class="btn btn-primary" type="button" onclick="registrar();">Confirmar</button>
+            </div>
+
+        </form>
+        
+    </div>
+</div>

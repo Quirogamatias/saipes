@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block titulo %}
-    Listado de Alumnos
+    Listado de promedios de notas Finales
 {% endblock titulo %}
 
 {% block extra_css %}
@@ -14,27 +14,19 @@
         <div class="card-header">
             <div class="row">
                 <div class="col-md-8">
-                    <strong class="card-title">Listado de Alumnos</strong>
-                </div>
-                <div class="col-md-4">
-                    <button  type="button" class="btn btn-primary" onclick="abrir_modal_creacion('{% url 'institucion:crear_alumno' %}')">Crear Alumno</button>
+                    <strong class="card-title">Listado de promedios de notas finales</strong>
                 </div>
             </div>
             
         </div>
         <div class="table-stats order-table ov-h">        
-        <table id="tabla_alumnos" class="table">
+        <table id="tabla_promedios" class="table">
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Dni</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Email</th>
-                    <th>Domicilio</th>
-                    <th>Telefono</th>
-                    <th>Id de Carrera</th>
-                    <th>notificacion</th>
+                    <th>Materia</th>
+                    <th>Alumno</th>
+                    <th>Promedio</th>
                     <th>Opciones</th>
                 </tr>
             </thead>
@@ -56,6 +48,5 @@
  {% block extrajs %}
  <script src="{% static 'assets/js/lib/data-table/datatables.min.js' %}"></script>
  <script src="{% static 'assets/js/lib/data-table/datatables.bootstrap.min.js' %}"></script>
- <script src="{% static 'assets/js/institucion/alumno.js' %}"></script>
+ <script src="{% static 'assets/js/institucion/promedio.js' %}"></script>
  {% endblock extrajs %}
- 

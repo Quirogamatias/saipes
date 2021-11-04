@@ -1,36 +1,36 @@
-function listadoNotas(){
+function listadoPromedioP(){
     $.ajax({
-        url: "/institucion/listar_notas/",
+        url: "/institucion/listar_promediosp/",
         type: "get",
         dataType: "json",
         success: function(response){
-            if($.fn.DataTable.isDataTable('#tabla_notas')){
-                $('#tabla_notas').DataTable().destroy();
+            if($.fn.DataTable.isDataTable('#tabla_promediosp')){
+                $('#tabla_promediosp').DataTable().destroy();
             }
-            $('#tabla_notas tbody').html("");
+            $('#tabla_promediosp tbody').html("");
             for(let i = 0;i < response.length;i++){
                 let fila = '<tr>';
                 fila += '<td>' + (i+1) + '</td>';
-                fila += '<td>' + response[i]["fields"]['notas'] + '</td>';
                 if (response[i]["fields"]['id_materia'] == ''){
                     fila += '<td> Desconocido </td>';
                 } else {
                     fila += '<td>' + response[i]["fields"]['id_materia'] + '</td>';       
-                } 
+                }
                 if (response[i]["fields"]['id_alumno'] == ''){
                     fila += '<td> Desconocido </td>';
                 } else {
                     fila += '<td>' + response[i]["fields"]['id_alumno'] + '</td>';       
                 }
-                fila += '<td>' + response[i]["fields"]['tipo'] + '</td>';
+                fila += '<td>' + response[i]["fields"]['total'] + '</td>';
                 fila += '<td> <button type = "button" class = "btn btn-primary btn-sm tableButton"';
-                fila += ' onclick = "abrir_modal_edicion(\'/institucion/editar_notas/' + response[i]['pk']+'/\');"> EDITAR </button>';
+                fila += ' onclick = "abrir_modal_edicion(\'/institucion/editar_promedio/' + response[i]['pk']+'/\');"> EDITAR </button>';
                 fila += '<button type = "button" class = "btn btn-danger tableButton btn-sm"';
-                fila += 'onclick = "abrir_modal_eliminacion(\'/institucion/eliminar_notas/'+ response[i]['pk']+'/\');"> ELIMINAR </button> </td>';
+                fila += 'onclick = "abrir_modal_eliminacion(\'/institucion/eliminar_promedio/'+ response[i]['pk']+'/\');"> ELIMINAR </button></td>';
+                
                 fila += '</tr>';
-                $('#tabla_notas tbody').append(fila);
+                $('#tabla_promediosp tbody').append(fila);
             }             
-            $('#tabla_notas').DataTable({
+            $('#tabla_promediosp').DataTable({
                 language: {
                     "decimal": "",
                     "emptyTable": "No hay información",
@@ -70,7 +70,7 @@ function registrar() {
         contentType: false, 
         success: function (response) {
             notificacionSuccess(response.mensaje);
-            listadoNotas();
+            listadoPromedioP();
             cerrar_modal_creacion();
         },
         error: function (error) {
@@ -92,7 +92,7 @@ function editar() {
         contentType: false, 
         success: function (response) {
             notificacionSuccess(response.mensaje);
-            listadoNotas();
+            listadoPromedioP();
             cerrar_modal_edicion();
         },
         error: function (error) {
@@ -107,11 +107,11 @@ function eliminar(pk){
         data: {
             csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
         },
-		url: '/institucion/notas/eliminar_notas/'+pk+'/',
+		url: '/institucion/materia/eliminar_materia/'+pk+'/',
 		type: 'post',
 		success: function(response) {
             notificacionSuccess(response.mensaje);
-			listadoNotas();
+			listadoPromedioP();
 			cerrar_modal_eliminacion();
 		},
 		error: function(error) {
@@ -120,5 +120,5 @@ function eliminar(pk){
 	});
 }
 $(document).ready(function(){
-    listadoNotas();
+    listadoPromedioP();
 });

@@ -17,14 +17,16 @@ class Curso(models.Model):
     estado = models.BooleanField('Curso activado/no activado', default= True)
 
     def natural_key(self):
-        return self.nombre
+        return f'Nombre del Curso: {self.nombre}, Capacidad: {self.capacidad}, Turno: {self.turno}'
+       
     class Meta:
         verbose_name = 'Curso'
         verbose_name_plural = 'Cursos'
         ordering = ['nombre']
 
     def __str__(self):
-        return self.nombre
+        return f'Nombre del Curso: {self.nombre},Capacidad: {self.capacidad}, Turno: {self.turno}'
+        
 
 class Horario(models.Model):
     id_horario = models.AutoField(primary_key= True)
@@ -43,14 +45,14 @@ class Horario(models.Model):
     estado = models.BooleanField('Horario activado/no activado', default= True)
 
     def natural_key(self):
-        return f'Dia {self.dia}, horario inicio {self.hora_inicio}, horario final {self.hora_fin}'    
+        return f'Dia {self.dia}, horario inicio {self.hora_inicio}, horario final {self.hora_fin}, Curso {self.id_curso}'    
     class Meta:
         verbose_name = 'Horario'
         verbose_name_plural = 'Horarios'
         ordering = ['dia']
 
     def __str__(self):
-        return f'Dia {self.dia}, Hora de Inicio {self.hora_inicio}, Hora de Fin{self.hora_fin}'
+        return f'Dia {self.dia}, Hora de Inicio {self.hora_inicio}, Hora de Fin{self.hora_fin}, Curso {self.id_curso}'
 
 def quitar_relacion_curso_horario(sender,instance,**kwargs):
     if instance.estado == False:
@@ -83,9 +85,7 @@ class Materia(models.Model):
         horarios = str([horario for horario in self.id_horario.all()])
         return horarios
     
-    
-
-
+ 
 #def quitar_relacion_horario_materia(sender,instance,**kwargs):
  #   if instance.estado == False:
   #      horario = instance.id_horario
@@ -137,9 +137,14 @@ class Alumno(models.Model):
     telefono = models.CharField('telefono del alumno',max_length=100, null=False, blank = False)
     estado = models.BooleanField('Alumno activado/no activado', default= True)
     fecha_de_creacion = models.DateField('Fecha de creacion', auto_now=True, auto_now_add=False)
-    #id_usuario = models.OneToOneField(Usuario, on_delete = models.CASCADE)
+    id_usuario = models.OneToOneField(Usuario, on_delete = models.CASCADE, null=True, blank = True)
+    t = (
+        (True,'activo'),
+        (False,'desactivado'),
+    )
+    notificacion = models.BooleanField('notificacion activado/no activado',choices=t, default= True,null=True, blank = True)
     id_carrera = models.ManyToManyField(Carrera)
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    #usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
 
     def natural_key(self):
         #return self.apellido
@@ -150,7 +155,7 @@ class Alumno(models.Model):
         ordering = ['apellido']
 
     def __str__(self):
-        return f'Alumno {self.apellido}, Usuario {self.usuario}'
+        return f'Alumno {self.apellido}, Nombre {self.nombre}'
 
 def quitar_relacion_carrera_alumno(sender,instance,**kwargs):
     if instance.estado == False:
@@ -207,16 +212,23 @@ class Administrador(models.Model):
     #id_usuario = models.OneToOneField(Usuario, on_delete = models.CASCADE)
     estado = models.BooleanField('Administrador activado/no activado', default= True)
     fecha_de_creacion = models.DateField('Fecha de creacion', auto_now=False, auto_now_add=True)
-    
+    id_usuario = models.OneToOneField(Usuario, on_delete = models.CASCADE, null=True, blank = True)
+    t = (
+        (True,'activo'),
+        (False,'desactivado'),
+    )
+    notificacion = models.BooleanField('notificacion activado/no activado',choices=t, default= True,null=True, blank = True)
+
     def natural_key(self):
-        return self.apellido
+        return f'Administrador {self.apellido}, Nombre {self.nombre}'
+
     class Meta:
         verbose_name = 'Administrador'
         verbose_name_plural = 'Administradores'
         ordering = ['apellido']
 
     def __str__(self):
-        return f'Administrador {self.apellido}'
+        return f'Administrador {self.apellido}, Nombre {self.nombre}'
 
 class Profesor(models.Model):
     id_profesor = models.AutoField(primary_key= True)
@@ -226,46 +238,50 @@ class Profesor(models.Model):
     email = models.EmailField('Correo Electronico', blank=False,null=False)
     domicilio = models.CharField('domicilio del profesor',max_length=100, null=False, blank = False)
     telefono = models.CharField('telefono del profesor',max_length=100, null=False, blank = False) 
-    #id_usuario = models.OneToOneField(Usuario, on_delete = models.CASCADE)
+    notificacion = models.BooleanField('notificacion activado/no activado', default= True)
     estado = models.BooleanField('Profesor activado/no activado', default= True)
     fecha_de_creacion = models.DateField('Fecha de creacion', auto_now=False, auto_now_add=True)
-    id_materia = models.ManyToManyField(Materia)
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-
+    id_usuario = models.OneToOneField(Usuario, on_delete = models.CASCADE, null=True, blank = True)
+    t = (
+        (True,'activo'),
+        (False,'desactivado'),
+    )
+    notificacion = models.BooleanField('notificacion activado/no activado',choices=t, default= True,null=True, blank = True)
+    #id_materia = models.ManyToManyField(Materia)
+    
     def natural_key(self):
-        return self.apellido
+        return f'Profesor {self.apellido}, Nombre {self.nombre}'
     class Meta:
         verbose_name = 'Profesor'
         verbose_name_plural = 'Profesores'
         ordering = ['apellido']
 
     def __str__(self):
-        return f'Profesor {self.apellido}, Usuario {self.usuario}'
+        return f'Profesor {self.apellido}, Nombre {self.nombre}'
 
-def quitar_relacion_materia_profesor(sender,instance,**kwargs):
-    if instance.estado == False:
-        materia = instance.id_materia
-        profesor = Profesor.objects.filter(id_materia=materia)
-        for profesor in profesor:
-            profesor.materia.remove(materia)
-
-post_save.connect(quitar_relacion_materia_profesor,sender = Materia)
 class Notas(models.Model):
     id_notas = models.AutoField(primary_key= True)
-    notas = models.CharField('Notas',max_length=100, null=False, blank = False)
+    notas = models.FloatField('Notas',max_length=10, null=False, blank = False)
     id_materia =  models.ForeignKey(Materia, on_delete=models.CASCADE)
     id_alumno =  models.ForeignKey(Alumno, on_delete=models.CASCADE)
+    tip = (
+        ('Parcial', 'Parcial'),
+        ('Final', 'Final'),
+    )
+    tipo = models.CharField('Tipo',max_length=100,choices=tip, null=False, blank = False)    
     estado = models.BooleanField('Notas activado/no activado', default= True)
-
+    #cantidad de finales que tiene la materia, en este caso 4
+    #a=np.array([1,3,5]) b=np.array([[1,3,5],[1,3,5],[1,3,5]])
+    #podria hacer que cuando creeo una nota, pregunte si esa nota existe y si existe que cree la nueva nota,si son mas de 4 notas que no cree otra nota
     def natural_key(self):
-        return self.notas
+        return f'Materia {self.materia}, Alumno {self.apellido}, Promedio {self.notas}'
     class Meta:
         verbose_name = 'Nota'
         verbose_name_plural = 'Notas'
         ordering = ['notas']
 
     def __str__(self):
-        return self.notas
+        return f'Materia {self.id_materia}, Alumno {self.id_alumno}, Notas {self.notas}'
 
 def quitar_relacion_materia_alumno_notas(sender,instance,**kwargs):
     if instance.estado == False:        
@@ -339,4 +355,88 @@ class PromedioAsistencia(models.Model):
 
     def __str__(self):
         return f'Materia {self.id_materia}, Alumno {self.id_alumno}, Promedio {self.promedio}'
+
+class PromedioNotasFinal(models.Model):
+    id_promedionotasfinal = models.AutoField(primary_key= True)
+    id_materia = models.ForeignKey(Materia, on_delete=models.CASCADE)   
+    id_alumno = models.ForeignKey(Alumno, on_delete=models.CASCADE)
+    cantidad = models.IntegerField('Cantidad de notas',null=False, blank = False,default=0)
+    suma = models.FloatField('Suma de notas',null=False, blank = False,default=0)
+    total = models.FloatField('Total de notas',null=False, blank = False,default=0)
+    estado = models.BooleanField('Promedio activado/no activado', default= True)
+    
+    def natural_key(self):
+        return f'Materia {self.materia}, Alumno {self.apellido}, Promedio {self.total}'
    
+    class Meta:
+        verbose_name = 'PromedioNotasFinal'
+        verbose_name_plural = 'PromedioNotasFinales'
+        ordering = ['id_promedionotasfinal']
+
+    def __str__(self):
+        return f'Materia {self.id_materia}, Alumno {self.id_alumno}, Promedio {self.total}'
+        #3+5+6=14 14/3
+
+class PromedioNotasParcial(models.Model):
+    id_promedionotasparcial = models.AutoField(primary_key= True)
+    id_materia = models.ForeignKey(Materia, on_delete=models.CASCADE)   
+    id_alumno = models.ForeignKey(Alumno, on_delete=models.CASCADE)
+    cantidad = models.IntegerField('Cantidad de notas',null=False, blank = False,default=0)
+    suma = models.FloatField('Suma de notas',null=False, blank = False,default=0)
+    total = models.FloatField('Total de notas',null=False, blank = False,default=0)
+    estado = models.BooleanField('Promedio activado/no activado', default= True)
+    
+    def natural_key(self):
+        return f'Materia {self.materia}, Alumno {self.apellido}, Promedio {self.total}'
+   
+    class Meta:
+        verbose_name = 'PromedioNotasParcial'
+        verbose_name_plural = 'PromedioNotasParciales'
+        ordering = ['id_promedionotasparcial']
+
+    def __str__(self):
+        return f'Materia {self.id_materia}, Alumno {self.id_alumno}, Promedio {self.total}'
+ 
+class InscripcionExamen(models.Model):
+    id_inscripcionexamen = models.AutoField(primary_key= True)
+    id_materia = models.ForeignKey(Materia, on_delete=models.CASCADE)
+    id_alumno = models.ForeignKey(Alumno, on_delete=models.CASCADE)     
+    fecha = models.DateField('Fecha de creacion', default=timezone.now)
+    estado = models.BooleanField('inscripcionExamen activado/no activado', default= True)
+    
+    def natural_key(self):
+        return f'materia {self.materia}, Alumno {self.apellido}, fecha de inscripcion {self.fecha}'
+   
+    class Meta:
+        verbose_name = 'InscripcionExamen'
+        verbose_name_plural = 'InscripcionExamenes'
+        ordering = ['id_inscripcionexamen']
+
+    def __str__(self):
+        return f'Materia {self.id_materia}, Alumno {self.id_alumno}, fecha de inscripcion {self.fecha}'
+
+class InscripcionProfesor(models.Model):
+    id_inscripcionProfesor = models.AutoField(primary_key= True)
+    fecha_inscripcion = models.DateTimeField('Fecha de creacion', default=timezone.now)
+    id_profesor = models.ForeignKey(Profesor, on_delete = models.CASCADE)
+    id_materia = models.ForeignKey(Materia, on_delete=models.CASCADE)
+    estado = models.BooleanField('Inscripcion activado/no activado', default= True)
+
+    def natural_key(self):
+        return f'Materia {self.materia}, Profesor {self.apellido}'
+   
+    class Meta:
+        verbose_name = 'InscripcionProfesor'
+        verbose_name_plural = 'InscripcionProfesores'
+        ordering = ['id_inscripcionProfesor']
+    def __str__(self):
+        return f'Materia {self.id_materia}, Profesor {self.id_profesor}'
+   
+    
+    def obtener_profesor(self):
+        profesores = str([Profesor for Profesor in self.id_profesor.all().values_list('apellido',flat = True)]).replace("[","").replace("]","").replace("'","")
+        return profesores
+    
+    def obtener_materia(self):
+        materias = str([Materia for Materia in self.id_materia.all().values_list('materia',flat = True)]).replace("[","").replace("]","").replace("'","")
+        return materias
