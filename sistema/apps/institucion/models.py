@@ -26,8 +26,7 @@ class Curso(models.Model):
 
     def __str__(self):
         return f'Nombre del Curso: {self.nombre},Capacidad: {self.capacidad}, Turno: {self.turno}'
-        
-
+      
 class Horario(models.Model):
     id_horario = models.AutoField(primary_key= True)
     dias = (

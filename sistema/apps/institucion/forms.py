@@ -1,3 +1,4 @@
+from django.forms import *
 from django import forms
 from django.db.models import fields
 from .models import *
@@ -246,7 +247,6 @@ class AdministradorForm(forms.ModelForm):
             )          
         }
 
-
 class ProfesorForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -344,7 +344,6 @@ class MateriaForm(forms.ModelForm):
             )
         }
 
-
 class NotasForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
@@ -386,7 +385,6 @@ class NotasForm(forms.ModelForm):
                 }
             )
         }
-
 
 class CarreraForm(forms.ModelForm):
 
@@ -633,3 +631,12 @@ class InscripcionExamenForm(forms.ModelForm):
                 }
             )            
         }
+
+class TestForm(Form):
+    carrera = ModelChoiceField(queryset=Carrera.objects.all(),widget=Select(attrs={
+        'class': 'form-control'
+    }))
+
+    materia = forms.ModelChoiceField(queryset=Materia.objects.none(),widget=forms.Select(attrs={
+        'class': 'form-control'
+    }))

@@ -96,5 +96,6 @@ urlpatterns = [
     path('detalle_inscripcion/<int:pk>/',login_required(DetalleInscripcion.as_view()), name = 'detalle_inscripcion'),
     path('detalle_alumno/<int:pk>/',login_required(DetalleAlumno.as_view()), name = 'detalle_alumno'),
     path('asistencia_materia/<int:pk>/',login_required(AsistenciaMateria.as_view()), name = 'asistencia_materia'),
-   
+    path('test/',TestView.as_view(), name = 'test'),
+      
 ]

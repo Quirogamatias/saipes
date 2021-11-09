@@ -13,6 +13,10 @@ from django.core.mail import send_mail
 from django.conf import settings
 from apps.usuario.models import Usuario
 from apps.usuario.forms import FormularioUsuario
+#from django.test import TestForm
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 
 
 class Inicio(TemplateView):
@@ -403,12 +407,6 @@ class CrearAlumno(LoginYSuperStaffMixin, ValidarPermisosMixin,CreateView):
                     nombre=form.cleaned_data.get('nombre'),
                     apellido=form.cleaned_data.get('apellido')                                       
                 )
-                #usuario= Usuario(
-                 #   username=form2.cleaned_data.get('username'),
-                  #  email=nuevo.email,
-                   # nombre=nuevo.nombre,
-                    #apellido=nuevo.apellido              
-                #)
 
                 alumno = self.model.objects.all()
                 profesor = self.second_model.objects.all()
@@ -1835,7 +1833,6 @@ class EnviarMensaje(LoginYSuperStaffMixin, ValidarPermisosMixin,ListView):
 
 #eliminar atributo id materia de profesor, crear una clase que diga inscricpion de porfesor, en donde tiene el id de materia,id de profesor, curso
 #registrar inscripcion a examen final con 2 dias de anticipacion
-#agregar al alumno una variable que diga notidicaion en la cual decida que notificaiones quiere recibir y el profesro tambien
 
 class CrearInscripcionProfesor(LoginYSuperStaffMixin, ValidarPermisosMixin,CreateView):
     model = InscripcionProfesor
@@ -1911,6 +1908,8 @@ class ListadoInscripcionProfesores(LoginYSuperStaffMixin, ValidarPermisosMixin,V
 class CrearInscripcionExamen(LoginYSuperStaffMixin, ValidarPermisosMixin,CreateView):
     model = InscripcionExamen
     form_class = InscripcionExamenForm
+    second_model = Inscripcion
+    second_form_class = InscripcionForm
     template_name = 'institucion/inscripcionexamen/crear_inscripcion_examen.html'
     permission_required = ('institucion.view_inscripcionexamen', 'institucion.add_inscripcionexamen',
                            'institucion.delete_inscripcionexamen', 'institucion.change_inscripcionexamen')
@@ -1919,7 +1918,14 @@ class CrearInscripcionExamen(LoginYSuperStaffMixin, ValidarPermisosMixin,CreateV
         context = super(CrearInscripcionExamen, self).get_context_data(**kwargs)
         if 'form' not in context:
             context['form'] = self.form_class(self.request.GET)
-        return context
+        #if 'form2' not in context:
+         #   context['form2'] = self.second_form_class(self.request.GET)    
+        #return context
+    
+    #def get_queryset(self):
+        
+     #   return self.model.objects.filter(id_materia=self.request.user,estado = True)  
+
 
     def post(self,request,*args,**kwargs):
         a=0
@@ -2033,6 +2039,7 @@ class EstadoProfesor(ValidarProfesor,View):
             return redirect('institucion:inicio_profesores')
 
 class EstadoAdministrador(ValidarAdministrador,View):
+
     model = Administrador
     #second_model = Usuario
     permission_required = ('institucion.view_administrador', 'institucion.add_administrador',
@@ -2058,3 +2065,48 @@ class EstadoAdministrador(ValidarAdministrador,View):
             return HttpResponse(serialize('json', self.get_queryset(),use_natural_foreign_keys = True), 'application/json')
         else:
             return redirect('institucion:inicio_administradores')
+
+
+class TestView(LoginYSuperStaffMixin, ValidarPermisosMixin,TemplateView):
+    model = Materia
+    second_model = Carrera
+    template_name = "institucion/inscripcionexamen/test.html"
+
+    @method_decorator(csrf_exempt)
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, ** kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'search_carrera_id':           
+                #pass
+                data =[]
+                materia = self.model.objects.all()
+                carrera = Carrera.objects.filter(id_carrera=request.POST['id'])
+                #for j in range(len(materia)):
+                 #   if materia[j].id_materia == carrera.obtener_materias:
+                #data.append(carrera.obtener_materias)
+                
+
+                for i in Carrera.objects.filter(id_carrera=request.POST['id']):
+                    for materia in i.id_materia.all():
+                    #if i.id_materia
+                 #   for j in range(len(materia)):
+                  #      materia[j].id_materia == 
+                        data.append({'id':materia.id_materia, 'materia':materia.materia})
+                  #tengo que saber que datos me llega en este caso el id de carrera, como lo relaciono con el de materia             
+            else:
+                data['error'] = 'ha ocurrido un error'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data, safe=False)
+     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title']='Select animado | Django'
+        context['form'] = TestForm()#self.TestForm()#self.TestForm(form)#self.TestForm()#self.form_class 
+        return context
+    
