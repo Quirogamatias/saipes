@@ -101,6 +101,7 @@
                     </li>
                      
                     {% endif %}
+                    {% if request.user.tipo == "Alumno" or request.user.tipo == "Profesor" or request.user.tipo == "Administrador" or request.user.is_superuser %}
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
                                 <i class="menu-icon fa fa-users"></i>Calendario</a>
@@ -109,22 +110,27 @@
                             </ul>
                                                    
                     </li>
+                    {% endif %}
+                    {% if request.user.tipo == "Profesor" %}
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
-                                <i class="menu-icon fa fa-users"></i>Ejemplo</a>
+                                <i class="menu-icon fa fa-users"></i>Datos de Alumnos</a>
                             <ul class="sub-menu children dropdown-menu">                                 
-                                <li><i class="fa fa-id-badge"></i><a href="{% url 'usuarios:listado_usuario_alumnos' %}">Listado de usuarios Alumno</a></li>
+                                <li><i class="fa fa-id-badge"></i><a href="{% url 'usuarios:listado_usuario_alumnos' %}">Listado de Alumnos</a></li>
                             </ul>
                                                    
                     </li>
+                    {% endif %}
+                    {% if request.user.tipo == "Administrador" or request.user.is_superuser %}
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Curso</a>
                         <ul class="sub-menu children dropdown-menu">                            
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_curso' %}">Listado Curso</a>
                             </li>                            
                         </ul>
-                    </li> 
-
+                    </li>
+                    {% endif %} 
+                    {% if request.user.tipo == "Administrador" or request.user.is_superuser %}
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Horario</a>
                         <ul class="sub-menu children dropdown-menu">                                               
@@ -132,14 +138,19 @@
                             </li>
                         </ul>
                     </li> 
-                    {% if request.user.tipo == "Alumno" or request.user.is_superuser %}
+                    {% endif %}
+                    {% if request.user.tipo == "Alumno" or request.user.tipo == "Administrador" or request.user.is_superuser %}
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Alumno</a>
                         <ul class="sub-menu children dropdown-menu">
+                            {% if request.user.tipo == "Administrador" or request.user.is_superuser %}
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_alumno' %}">Listado Alumno</a>
                             </li>
+                            {% endif %}
+                            {% if request.user.tipo == "Alumno" %}
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:estado_alumno' %}">Estado Alumno</a>
                             </li>
+                            {% endif %}
                         </ul>
                     </li> 
                     {% endif %}
@@ -147,16 +158,24 @@
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Inscripcion</a>
                         <ul class="sub-menu children dropdown-menu">
+                            {% if request.user.tipo == "Administrador" or request.user.is_superuser %}
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_inscripcion' %}">Listado Inscripcion</a>
                             </li>
+                            {% endif %}
+                            {% if request.user.tipo == "Administrador" or request.user.is_superuser %}
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_inscripcion_profesor' %}">Listado Inscripcion Profesor</a>
                             </li>
+                            {% endif %}
+                            {% if request.user.tipo == "Administrador" or request.user.is_superuser %}
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_inscripcion_examen' %}">Listado Inscripcion Examen</a>
                             </li>
+                            {% endif %}
+                            {% if request.user.tipo == "Administrador" or request.user.tipo == "Profesor" or request.user.is_superuser %}
+                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:test' %}">Materias por Carrera</a>
+                            </li>
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:listar_materia_alumno' %}">Listado alumno por materia</a>
-                            </li>
-                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:test' %}">Test</a>
-                            </li>
+                            </li>                
+                            {% endif %}
                         </ul>
                     </li> 
 
@@ -166,35 +185,35 @@
                         <ul class="sub-menu children dropdown-menu">
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_administrador' %}">Listado Administrador</a>
                             </li>
-                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:estado_administrador' %}">Estado Administrador</a>
-                            </li>
                         </ul>
                     </li>
                     {% endif %} 
 
-                    {% if request.user.tipo == "Profesor" or request.user.is_superuser%}
+                    {% if request.user.tipo == "Administrador" or request.user.tipo == "Profesor" or request.user.is_superuser %}
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Profesor</a>
                         <ul class="sub-menu children dropdown-menu">
+                            {% if request.user.tipo == "Administrador" or request.user.is_superuser %}
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_profesor' %}">Listado Profesor</a>
                             </li>
+                            {% endif %}
+                            {% if request.user.tipo == "Profesor"%}
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:estado_profesor' %}">Estado Profesor</a>
                             </li>
+                            {% endif %}
                         </ul>
                     </li> 
                     {% endif %}
-
+                    {% if request.user.tipo == "Administrador" or request.user.is_superuser %}
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Materia</a>
                         <ul class="sub-menu children dropdown-menu">
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_materia' %}">Listado Materia</a>
                             </li>
-                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:porcentaje' %}">Porcentaje</a>
-                            </li>
                         </ul>
-                            
+                    {% endif %}       
                     </li> 
-                    
+                    {% if request.user.tipo == "Administrador" or request.user.tipo == "Profesor" or request.user.is_superuser %}
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Notas</a>
                         <ul class="sub-menu children dropdown-menu">
@@ -202,7 +221,8 @@
                             </li>
                         </ul>
                     </li> 
-                    
+                    {% endif %}
+                    {% if request.user.tipo == "Administrador" or request.user.is_superuser %}
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Carrera</a>
                         <ul class="sub-menu children dropdown-menu">                            
@@ -210,7 +230,8 @@
                             </li>
                         </ul>
                     </li> 
-                    
+                    {% endif %}
+                    {% if request.user.tipo == "Administrador" or request.user.tipo == "Profesor" or request.user.is_superuser %}
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Asistencia</a>
                         <ul class="sub-menu children dropdown-menu">                            
@@ -218,26 +239,45 @@
                             </li>
                         </ul>
                     </li>
+                    {% endif %}
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Promedio Asistencia</a>
-                        <ul class="sub-menu children dropdown-menu">                            
+                        <ul class="sub-menu children dropdown-menu">  
+                            {% if request.user.tipo == "Profesor" or request.user.tipo == "Administrador" or request.user.is_superuser %}                          
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_promedioasistencia' %}">Listado Promedio Asistencia</a>
                             </li>
+                            {% endif %}
+                            {% if request.user.tipo == "Alumno" %}
+                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:Inicio_PromedioAsistenciaAlumno' %}">Promedio Asistencia alumno</a>
+                            </li>
+                            {% endif %}
                         </ul>
                     </li>
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Promedio Notas</a>
-                        <ul class="sub-menu children dropdown-menu">                            
+                        <ul class="sub-menu children dropdown-menu">   
+                            {% if request.user.tipo == "Profesor" or request.user.tipo == "Administrador" or request.user.is_superuser %}                         
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_promedionotasfinal' %}">Listado Promedio Notas Final</a>
                             </li>
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_promedionotasparcial' %}">Listado Promedio Notas Parcial</a>
                             </li>
+                            {% endif %}
+                            {% if request.user.tipo == "Alumno" %}
+                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:promedio_notas_final_alumno' %}">Promedio Notas Final del Alumno</a>
+                            </li>
+                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:promedio_notas_parcial_alumno' %}">Promedio Notas Parcial del Alumno</a>
+                            </li>
+                            {% endif %}
                         </ul>
                     </li> 
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Enviar Mensaje</a>
                         <ul class="sub-menu children dropdown-menu">                            
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:enviar_mensaje' %}">Enviar Mensaje</a>
+                            </li>
+                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:mensaje_advertencia' %}">Mensaje Advertencia</a>
+                            </li>
+                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:mensaje_advertencia_asistencia' %}">Mensaje Advertencia Asistencia</a>
                             </li>
                         </ul>
                     </li> 

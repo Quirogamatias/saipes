@@ -11,8 +11,25 @@
             <div class="modal-body">
                 <div id="erroresEdicion">
                 
+                </div> 
+                               
+                <div class="form-group">
+                    <label for="{{form.dni.name}}">{{form.notas.label}}</label>
+                    {{form.notas}}
+                    
+                </div>               
+                <div class="form-group">
+                    <label for="{{form.dni.name}}">{{form.id_materia.label}}</label>
+                    {{form.id_materia}}
                 </div>
-                {{ form.as_p }}
+                <div class="form-group">
+                    <label for="{{form.dni.name}}">{{form.id_alumno.label}}</label>
+                    {{form.id_alumno}}
+                </div>
+                <div class="form-group">
+                    <label for="{{form.dni.name}}">{{form.tipo.label}}</label>
+                    {{form.tipo}}
+                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-danger" type="button" onclick="cerrar_modal_edicion();">Cancelar</button>

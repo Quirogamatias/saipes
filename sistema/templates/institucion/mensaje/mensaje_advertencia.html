@@ -1,0 +1,39 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block titulo %}
+    Mensaje de Advertencia
+{% endblock titulo %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'assets/css/lib/datatable/dataTables.bootstrap.min.css' %}">
+{% endblock extra_css %}
+
+ {% block body %}     
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-8">
+                    <strong class="card-title">Mensaje de Advertencia</strong>
+                </div>                
+            </div>
+            
+        </div>
+        <div class="table-stats order-table ov-h"> 
+        <form action="/institucion/mensaje_advertencia/" method="POST"> 
+            {% csrf_token %} 
+            <p>
+                Asunto:
+                <input type="text" name="txtAsunto" value="mensaje para alumnos desaprobados">
+            </p>
+            <p>
+                Mensaje
+                <textarea name="txtMensaje" cols="30" rows="5" style="resize: none;"> la cual es menor a 6 y tendra que recuperar el pacial</textarea>
+
+            </p>
+            <input type="submit" value="Enviar">
+            
+        </form>
+        </div>
+    </div>   
+{% endblock body %}

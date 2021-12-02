@@ -12,7 +12,40 @@
                 <div id="erroresEdicion">
 
                 </div>
-                {{ form.as_p }}
+                
+                <div class="form-group">
+                    <label for="{{form.dni.name}}">{{form.dni.label}}</label>
+                    {{form.dni}}
+                </div>
+                <div class="form-group">
+                    <label for="{{form.nombre.name}}">{{form.nombre.label}}</label>
+                    {{form.nombre}}
+                </div>
+                <div class="form-group">
+                    <label for="{{form.apellido.name}}">{{form.apellido.label}}</label>
+                    {{form.apellido}}
+                </div>
+                <div class="form-group">
+                    <label for="{{form.email.name}}">{{form.email.label}}</label>
+                    {{form.email}}
+                </div>
+                <div class="form-group">
+                    <label for="{{form.domicilio.name}}">{{form.domicilio.label}}</label>
+                    {{form.domicilio}}
+                </div>
+                <div class="form-group">
+                    <label for="{{form.telefono.name}}">{{form.telefono.label}}</label>
+                    {{form.telefono}}
+                </div>
+                <div class="form-group">
+                    <label for="{{form.id_carrera.name}}">{{form.id_carrera.label}}</label>
+                    {{form.id_carrera}}
+                </div>
+                <div class="form-group">
+                    <label for="{{form.notificacion.name}}">{{form.notificacion.label}}</label>
+                    {{form.notificacion}}
+                </div>        
+                
             </div>
             <div class="modal-footer">
                 <button class="btn btn-danger" type="button" onclick="cerrar_modal_edicion();">Cancelar</button>

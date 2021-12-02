@@ -106,7 +106,7 @@ function eliminar(pk){
         data: {
             csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
         },
-		url: '/institucion/materia/eliminar_materia/'+pk+'/',
+		url: '/institucion/eliminar_materia/'+pk+'/',
 		type: 'post',
 		success: function(response) {
             notificacionSuccess(response.mensaje);

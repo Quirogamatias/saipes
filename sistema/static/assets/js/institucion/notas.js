@@ -104,10 +104,10 @@ function editar() {
 }
 function eliminar(pk){
 	$.ajax({
-        data: {
+        data:{
             csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
         },
-		url: '/institucion/notas/eliminar_notas/'+pk+'/',
+		url: '/institucion/eliminar_notas/'+pk+'/',
 		type: 'post',
 		success: function(response) {
             notificacionSuccess(response.mensaje);

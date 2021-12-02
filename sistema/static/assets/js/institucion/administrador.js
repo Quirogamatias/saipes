@@ -72,9 +72,7 @@ function listadoAdministrador(){
                 fila += '<td>' + response[i]["fields"]['email'] + '</td>';
                 fila += '<td>' + response[i]["fields"]['notificacion'] + '</td>';
                 fila += '<td><button type = "button" class = "btn btn-primary btn-sm tableButton"';
-                fila += ' onclick = "abrir_modal_edicion(\'/institucion/editar_administrador/' + response[i]['pk']+'/\');"> EDITAR </button>';
-                fila += '<button type = "button" class = "btn btn-danger tableButton  btn-sm" ';
-                fila += 'onclick = "abrir_modal_eliminacion(\'/institucion/eliminar_administrador/' + response[i]['pk'] +'/\');"> ELIMINAR </buttton></td>';
+                fila += ' onclick = "abrir_modal_edicion(\'/institucion/editar_administrador/' + response[i]['pk']+'/\');"> EDITAR </button></td>';
                 fila += '</tr>';
                 $('#tabla_administrador tbody').append(fila);
             }             

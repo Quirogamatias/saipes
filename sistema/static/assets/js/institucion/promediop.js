@@ -22,15 +22,65 @@ function listadoPromedioP(){
                     fila += '<td>' + response[i]["fields"]['id_alumno'] + '</td>';       
                 }
                 fila += '<td>' + response[i]["fields"]['total'] + '</td>';
-                fila += '<td> <button type = "button" class = "btn btn-primary btn-sm tableButton"';
-                fila += ' onclick = "abrir_modal_edicion(\'/institucion/editar_promedio/' + response[i]['pk']+'/\');"> EDITAR </button>';
-                fila += '<button type = "button" class = "btn btn-danger tableButton btn-sm"';
-                fila += 'onclick = "abrir_modal_eliminacion(\'/institucion/eliminar_promedio/'+ response[i]['pk']+'/\');"> ELIMINAR </button></td>';
-                
                 fila += '</tr>';
                 $('#tabla_promediosp tbody').append(fila);
             }             
             $('#tabla_promediosp').DataTable({
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                      "first": "Primero",
+                      "last": "Ultimo",
+                      "next": "Siguiente",
+                      "previous": "Anterior"
+                    },
+                  },
+            });
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+}
+function listadoPromediosP(){
+    $.ajax({
+        url: "/institucion/promedio_notas_parcial_alumno/",
+        type: "get",
+        dataType: "json",
+        success: function(response){
+            if($.fn.DataTable.isDataTable('#tabla_promediop')){
+                $('#tabla_promediop').DataTable().destroy();
+            }
+            $('#tabla_promediop tbody').html("");
+            for(let i = 0;i < response.length;i++){
+                let fila = '<tr>';
+                fila += '<td>' + (i+1) + '</td>';
+                if (response[i]["fields"]['id_materia'] == ''){
+                    fila += '<td> Desconocido </td>';
+                } else {
+                    fila += '<td>' + response[i]["fields"]['id_materia'] + '</td>';       
+                }
+                if (response[i]["fields"]['id_alumno'] == ''){
+                    fila += '<td> Desconocido </td>';
+                } else {
+                    fila += '<td>' + response[i]["fields"]['id_alumno'] + '</td>';       
+                }
+                fila += '<td>' + response[i]["fields"]['total'] + '</td>';
+                fila += '</tr>';
+                $('#tabla_promediop tbody').append(fila);
+            }             
+            $('#tabla_promediop').DataTable({
                 language: {
                     "decimal": "",
                     "emptyTable": "No hay información",
@@ -121,4 +171,5 @@ function eliminar(pk){
 }
 $(document).ready(function(){
     listadoPromedioP();
+    listadoPromediosP();
 });

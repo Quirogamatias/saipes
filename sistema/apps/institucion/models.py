@@ -154,7 +154,7 @@ class Alumno(models.Model):
         ordering = ['apellido']
 
     def __str__(self):
-        return f'Alumno {self.apellido}, Nombre {self.nombre}'
+        return f'Apellido {self.apellido}, Nombre {self.nombre}'
 
 def quitar_relacion_carrera_alumno(sender,instance,**kwargs):
     if instance.estado == False:
@@ -271,7 +271,6 @@ class Notas(models.Model):
     estado = models.BooleanField('Notas activado/no activado', default= True)
     #cantidad de finales que tiene la materia, en este caso 4
     #a=np.array([1,3,5]) b=np.array([[1,3,5],[1,3,5],[1,3,5]])
-    #podria hacer que cuando creeo una nota, pregunte si esa nota existe y si existe que cree la nueva nota,si son mas de 4 notas que no cree otra nota
     def natural_key(self):
         return f'Materia {self.materia}, Alumno {self.apellido}, Promedio {self.notas}'
     class Meta:
@@ -402,7 +401,8 @@ class InscripcionExamen(models.Model):
     id_alumno = models.ForeignKey(Alumno, on_delete=models.CASCADE)     
     fecha = models.DateField('Fecha de creacion', default=timezone.now)
     estado = models.BooleanField('inscripcionExamen activado/no activado', default= True)
-    
+    #fecha = models.DateField('Fecha de creacion', auto_now=False, auto_now_add=True)
+
     def natural_key(self):
         return f'materia {self.materia}, Alumno {self.apellido}, fecha de inscripcion {self.fecha}'
    

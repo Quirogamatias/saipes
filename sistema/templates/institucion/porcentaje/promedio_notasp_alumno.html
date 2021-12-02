@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block titulo %}
-    Listado de Inscripciones del Profesor
+    Promedios de Notas Parciales del Alumno
 {% endblock titulo %}
 
 {% block extra_css %}
@@ -14,23 +14,19 @@
         <div class="card-header">
             <div class="row">
                 <div class="col-md-8">
-                    <strong class="card-title">Listado de Inscripciones de Profesores</strong>
-                </div>
-                <div class="col-md-4">
-                    <button  type="button" class="btn btn-primary" onclick="abrir_modal_creacion('{% url 'institucion:crear_inscripcion_profesor' %}')">Crear Inscripcion Profesor</button>
+                    <strong class="card-title">Promedios de Notas Parciales del Alumno</strong>
                 </div>
             </div>
             
         </div>
         <div class="table-stats order-table ov-h">        
-        <table id="tabla_inscripcion_profesores" class="table">
+        <table id="tabla_promediop" class="table">
             <thead>
                 <tr>
-                    <th>#</th>   
-                    <th>Fecha de Inscripcion</th>
-                    <th>Id del profesor</th>
-                    <th>Id de la Materia</th>
-                    <th>Opciones</th>
+                    <th>#</th>
+                    <th>Materia</th>
+                    <th>Alumno</th>
+                    <th>Promedio</th>
                 </tr>
             </thead>
             <tbody>  
@@ -51,6 +47,5 @@
  {% block extrajs %}
  <script src="{% static 'assets/js/lib/data-table/datatables.min.js' %}"></script>
  <script src="{% static 'assets/js/lib/data-table/datatables.bootstrap.min.js' %}"></script>
- <script src="{% static 'assets/js/institucion/inscripcionprofesor.js' %}"></script>
+ <script src="{% static 'assets/js/institucion/promediop.js' %}"></script>
  {% endblock extrajs %}
- 

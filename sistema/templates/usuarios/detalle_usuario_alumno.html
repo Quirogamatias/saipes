@@ -22,9 +22,7 @@ Usuario | {{ object }}
                     {% csrf_token %}
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-6">
-                                <p class="card-text">Usuario el: {{ object.pk }}</p>
-                            </div>
+                            
                             <div class="col-md-6">
                                 <p class="card-text"><strong>Nombre</strong></p>{{ object.nombre }}
                             </div>
@@ -37,9 +35,10 @@ Usuario | {{ object }}
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <button type="button" class="btn btn-primary btn-lg" ></button>Accion</button>
-                </div>
+                
+            </div>
+            <div class="col-md-6">
+                <button type = "button" class = "btn btn-primary btn-sm tableButton">mensaje</button>
             </div>
         </div>
 

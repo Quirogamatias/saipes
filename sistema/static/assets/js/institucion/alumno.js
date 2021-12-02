@@ -84,9 +84,7 @@ function listadoAlumno(){
                 }
                 fila += '<td>' + response[i]["fields"]['notificacion'] + '</td>';
                 fila += '<td> <button type = "button" class = "btn btn-primary btn-sm tableButton"';
-                fila += ' onclick = "abrir_modal_edicion(\'/institucion/editar_alumno/' + response[i]['pk']+'/\');"> EDITAR </button>';
-                fila += '<button type = "button" class = "btn btn-danger tableButton btn-sm"';
-                fila += 'onclick = "abrir_modal_eliminacion(\'/institucion/eliminar_alumno/'+ response[i]['pk']+'/\');"> ELIMINAR </button> </td>';
+                fila += ' onclick = "abrir_modal_edicion(\'/institucion/editar_alumno2/' + response[i]['pk']+'/\');"> EDITAR </button> </td>';
                 fila += '</tr>';
                 $('#tabla_alumno tbody').append(fila);
             }             
@@ -167,7 +165,7 @@ function eliminar(pk){
         data: {
             csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
         },
-		url: '/institucion/alumno/eliminar_alumno/'+pk+'/',
+		url: '/institucion/eliminar_alumno/'+pk+'/',
 		type: 'post',
 		success: function(response) {
             notificacionSuccess(response.mensaje);

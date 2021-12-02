@@ -39,12 +39,20 @@ class ValidarPermisosMixin(object):
 class ValidarAlumno(object):
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            if request.user.tipo == "Alumno" or request.user.is_superuser or request.user.tipo == "Administrador":
+            if request.user.tipo == "Alumno":
                 return super().dispatch(request, *args, **kwargs)
             else:
                 messages.error(request, 'No tienes permisos para realizar esta acción.') 
         return redirect('index')
 
+class ValidarAlumnoA(object):
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            if request.user.tipo == "Alumno" or request.user.is_superuser or request.user.tipo == "Administrador":
+                return super().dispatch(request, *args, **kwargs)
+            else:
+                messages.error(request, 'No tienes permisos para realizar esta acción.') 
+        return redirect('index')
 class ValidarProfesor(object):
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -53,6 +61,7 @@ class ValidarProfesor(object):
             else:
                 messages.error(request, 'No tienes permisos para realizar esta acción.') 
         return redirect('index')
+
 
 class ValidarAdministrador(object):
     def dispatch(self, request, *args, **kwargs):

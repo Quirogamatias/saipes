@@ -103,7 +103,7 @@ function eliminar(pk){
         data: {
             csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
         },
-		url: '/institucion/horario/eliminar_horario/'+pk+'/',
+		url: '/institucion/eliminar_horario/'+pk+'/',
 		type: 'post',
 		success: function(response) {
             notificacionSuccess(response.mensaje);

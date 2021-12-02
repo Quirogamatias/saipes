@@ -25,9 +25,7 @@ function listadoInscripcionesProfesores(){
                 fila += '<td> <button type = "button" class = "btn btn-primary btn-sm tableButton"';
                 fila += ' onclick = "abrir_modal_edicion(\'/institucion/editar_inscripcion_profesor/' + response[i]['pk']+'/\');"> EDITAR </button>';
                 fila += '<button type = "button" class = "btn btn-danger tableButton btn-sm"';
-                fila += 'onclick = "abrir_modal_eliminacion(\'/institucion/eliminar_inscripcion_profesor/'+ response[i]['pk']+'/\');"> ELIMINAR </button>';
-                fila += '<button type = "button" class = "btn btn-info tableButton btn-sm"';
-                fila += 'onclick="location.href=(\'/institucion/detalle_inscripcion_profesor/'+ response[i]['pk']+'/\');"> DETALLE </button> </td>';
+                fila += 'onclick = "abrir_modal_eliminacion(\'/institucion/eliminar_inscripcion_profesor/'+ response[i]['pk']+'/\');"> ELIMINAR </button> </td>';
                 fila += '</tr>';
                 $('#tabla_inscripcion_profesores tbody').append(fila);
             }             
@@ -111,7 +109,7 @@ function eliminar(pk){
         data: {
             csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
         },
-		url: '/institucion/inscripcion/eliminar_inscripcion/'+pk+'/',
+		url: '/institucion/eliminar_inscripcion_profesor/'+pk+'/',
 		type: 'post',
 		success: function(response) {
             notificacionSuccess(response.mensaje);

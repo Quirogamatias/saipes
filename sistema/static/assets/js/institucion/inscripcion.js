@@ -171,7 +171,7 @@ function eliminar(pk){
         data: {
             csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
         },
-		url: '/institucion/inscripcion/eliminar_inscripcion/'+pk+'/',
+		url: '/institucion/eliminar_inscripcion/'+pk+'/',
 		type: 'post',
 		success: function(response) {
             notificacionSuccess(response.mensaje);

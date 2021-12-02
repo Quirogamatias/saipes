@@ -157,7 +157,7 @@ function eliminar(pk){
         data: {
             csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
         },
-		url: '/institucion/profesor/eliminar_profesor/'+pk+'/',
+		url: '/institucion/eliminar_profesor/'+pk+'/',
 		type: 'post',
 		success: function(response) {
             notificacionSuccess(response.mensaje);
