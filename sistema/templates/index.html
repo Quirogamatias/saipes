@@ -8,7 +8,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{% block titulo %}Sistema{% endblock titulo %}</title>
+    <title>{% block titulo %}Sistema SAIpes{% endblock titulo %}</title>
     <meta name="description" content="Ela Admin - HTML5 Admin Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -130,15 +130,20 @@
                         </ul>
                     </li>
                     {% endif %} 
-                    {% if request.user.tipo == "Administrador" or request.user.is_superuser %}
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Horario</a>
-                        <ul class="sub-menu children dropdown-menu">                                               
+                        <ul class="sub-menu children dropdown-menu">   
+                            {% if request.user.tipo == "Administrador" or request.user.is_superuser %}                                            
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_horario' %}">Listado Horario</a>
                             </li>
+                            {% endif %}
+                            {% if request.user.tipo == "Profesor" or request.user.tipo == "Alumno" %}
+                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_horariot' %}">Listado Horario</a>
+                            </li>
+                            {% endif %}
                         </ul>
                     </li> 
-                    {% endif %}
+                    
                     {% if request.user.tipo == "Alumno" or request.user.tipo == "Administrador" or request.user.is_superuser %}
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Alumno</a>
@@ -151,6 +156,16 @@
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:estado_alumno' %}">Estado Alumno</a>
                             </li>
                             {% endif %}
+                        </ul>
+                    </li> 
+                    {% endif %}
+                    {% if request.user.tipo == "Profesor" %}
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Alumno</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_alumnop' %}">Listado Alumno</a>
+                            </li>
+                            
                         </ul>
                     </li> 
                     {% endif %}
@@ -176,6 +191,10 @@
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:listar_materia_alumno' %}">Listado alumno por materia</a>
                             </li>                
                             {% endif %}
+                            {% if request.user.tipo == "Alumno" %}
+                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_inscripcion_examen_alumno' %}">Listado Inscripcion Examen</a>
+                            </li>              
+                            {% endif %}
                         </ul>
                     </li> 
 
@@ -189,7 +208,6 @@
                     </li>
                     {% endif %} 
 
-                    {% if request.user.tipo == "Administrador" or request.user.tipo == "Profesor" or request.user.is_superuser %}
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Profesor</a>
                         <ul class="sub-menu children dropdown-menu">
@@ -197,21 +215,31 @@
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_profesor' %}">Listado Profesor</a>
                             </li>
                             {% endif %}
-                            {% if request.user.tipo == "Profesor"%}
+                            {% if request.user.tipo == "Profesor" %}
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:estado_profesor' %}">Estado Profesor</a>
+                            </li>
+                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_profesort' %}">Listado Profesor</a>
+                            </li>
+                            {% endif %}
+                            {% if request.user.tipo == "Alumno" %}
+                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_profesoral' %}">Listado Profesor</a>
                             </li>
                             {% endif %}
                         </ul>
                     </li> 
-                    {% endif %}
-                    {% if request.user.tipo == "Administrador" or request.user.is_superuser %}
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Materia</a>
                         <ul class="sub-menu children dropdown-menu">
+                            {% if request.user.tipo == "Administrador" or request.user.is_superuser %}
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_materia' %}">Listado Materia</a>
                             </li>
+                            {% endif %} 
+                            {% if request.user.tipo == "Profesor" or request.user.tipo == "Alumno" %}
+                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_materiat' %}">Listado Materia</a>
+                            </li>
+                            {% endif %} 
                         </ul>
-                    {% endif %}       
+                          
                     </li> 
                     {% if request.user.tipo == "Administrador" or request.user.tipo == "Profesor" or request.user.is_superuser %}
                     <li class="menu-item-has-children dropdown">
@@ -331,8 +359,8 @@
                             <div class="card bg-primary">
                                 <div class="card-body">
                                     <blockquote class="blockquote mb-0 text-light text-center">
-                                        <h1 class="text-light">{{ user.username | upper }} BIENVENIDO A BIBLIOTECA.DEV</h1>
-                                        <footer class="blockquote-footer text-light">"Google puede darte 100.00 respuestas, el Bibliotecario puede darte la correcta." -<cite title="Neil Gaiman">Neil Gaiman</cite></footer>
+                                        <h1 class="text-light">{{ user.username | upper }} BIENVENIDO AL SISTEMA ACADEMICO SAIpes</h1>
+                                        <footer class="blockquote-footer text-light">"El exito es la suma de pequeños esfuezos repetidos dia tras dia" -<cite title="-">-</cite></footer>
                                     </blockquote>
                                 </div>
                             </div>

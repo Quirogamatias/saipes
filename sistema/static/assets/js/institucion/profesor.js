@@ -53,6 +53,104 @@ function listadoProfesores(){
         }
     });
 }
+function listadoProfesorest(){
+    $.ajax({
+        url: "/institucion/listar_profesorest/",
+        type: "get",
+        dataType: "json",
+        success: function(response){
+            if($.fn.DataTable.isDataTable('#tabla_profesorest')){
+                $('#tabla_profesorest').DataTable().destroy();
+            }
+            $('#tabla_profesores tbody').html("");
+            for(let i = 0;i < response.length;i++){
+                let fila = '<tr>';
+                fila += '<td>' + (i+1) + '</td>';
+                fila += '<td>' + response[i]["fields"]['nombre'] + '</td>';
+                fila += '<td>' + response[i]["fields"]['apellido'] + '</td>';
+                fila += '<td>' + response[i]["fields"]['email'] + '</td>';                     
+                fila += '<td><button type = "button" class = "btn btn-info tableButton btn-sm"';
+                fila += 'onclick="location.href=(\'/institucion/mensajea/'+ response[i]['pk']+'/\');"> ENVIAR MENSAJE </button> </td>';
+                fila += '</tr>';
+                $('#tabla_profesorest tbody').append(fila);
+            }             
+            $('#tabla_profesorest').DataTable({
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                      "first": "Primero",
+                      "last": "Ultimo",
+                      "next": "Siguiente",
+                      "previous": "Anterior"
+                    },
+                  },
+            });
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+}
+function listadoProfesoresal(){
+    $.ajax({
+        url: "/institucion/listar_profesoresal/",
+        type: "get",
+        dataType: "json",
+        success: function(response){
+            if($.fn.DataTable.isDataTable('#tabla_profesoresal')){
+                $('#tabla_profesoresal').DataTable().destroy();
+            }
+            $('#tabla_profesoresal tbody').html("");
+            for(let i = 0;i < response.length;i++){
+                let fila = '<tr>';
+                fila += '<td>' + (i+1) + '</td>';
+                fila += '<td>' + response[i]["fields"]['nombre'] + '</td>';
+                fila += '<td>' + response[i]["fields"]['apellido'] + '</td>';
+                fila += '<td>' + response[i]["fields"]['email'] + '</td>';                     
+                fila += '<td><button type = "button" class = "btn btn-info tableButton btn-sm"';
+                fila += 'onclick="location.href=(\'/institucion/mensajeal/'+ response[i]['pk']+'/\');"> ENVIAR MENSAJE </button> </td>';
+                fila += '</tr>';
+                $('#tabla_profesoresal tbody').append(fila);
+            }             
+            $('#tabla_profesoresal').DataTable({
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                      "first": "Primero",
+                      "last": "Ultimo",
+                      "next": "Siguiente",
+                      "previous": "Anterior"
+                    },
+                  },
+            });
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+}
 function listadoProfesor(){
     $.ajax({
         url: "/institucion/estado_profesor/",
@@ -74,9 +172,7 @@ function listadoProfesor(){
                 fila += '<td>' + response[i]["fields"]['telefono'] + '</td>'; 
                 fila += '<td>' + response[i]["fields"]['notificacion'] + '</td>';                      
                 fila += '<td> <button type = "button" class = "btn btn-primary btn-sm tableButton"';
-                fila += ' onclick = "abrir_modal_edicion(\'/institucion/editar_profesor/' + response[i]['pk']+'/\');"> EDITAR </button>';
-                fila += '<button type = "button" class = "btn btn-danger tableButton btn-sm"';
-                fila += 'onclick = "abrir_modal_eliminacion(\'/institucion/eliminar_profesor/'+ response[i]['pk']+'/\');"> ELIMINAR </button> </td>';
+                fila += ' onclick = "abrir_modal_edicion(\'/institucion/editar_profesor2/' + response[i]['pk']+'/\');"> EDITAR </button></td>';
                 fila += '</tr>';
                 $('#tabla_profesor tbody').append(fila);
             }             
@@ -172,4 +268,6 @@ function eliminar(pk){
 $(document).ready(function(){
     listadoProfesores();
     listadoProfesor();
+    listadoProfesorest();
+    listadoProfesoresal();
 });

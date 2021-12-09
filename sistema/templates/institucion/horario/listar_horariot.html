@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block titulo %}
-Datos de Profesor
+    Listado de Horarios
 {% endblock titulo %}
 
 {% block extra_css %}
@@ -14,23 +14,20 @@ Datos de Profesor
         <div class="card-header">
             <div class="row">
                 <div class="col-md-8">
-                    <strong class="card-title">Datos de Profesor</strong>
+                    <strong class="card-title">Listado de Horarios</strong>
                 </div>
             </div>
             
         </div>
         <div class="table-stats order-table ov-h">        
-        <table id="tabla_profesor" class="table">
+        <table id="tabla_horariost" class="table">
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Dni</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Email</th>
-                    <th>Domicilio</th>
-                    <th>Telefono</th>
-                    <th>Notificacion</th>
+                    <th>Dia</th>
+                    <th>Hora de inicio</th>
+                    <th>Hora del fin</th>
+                    <th>Id del curso</th>
                     <th>Opciones</th>
                 </tr>
             </thead>
@@ -52,6 +49,6 @@ Datos de Profesor
  {% block extrajs %}
  <script src="{% static 'assets/js/lib/data-table/datatables.min.js' %}"></script>
  <script src="{% static 'assets/js/lib/data-table/datatables.bootstrap.min.js' %}"></script>
- <script src="{% static 'assets/js/institucion/profesor.js' %}"></script>
+ <script src="{% static 'assets/js/institucion/horario.js' %}"></script>
  {% endblock extrajs %}
  

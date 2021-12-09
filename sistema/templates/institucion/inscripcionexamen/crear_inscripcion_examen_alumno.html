@@ -1,0 +1,50 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block titulo %}
+Inscripcion a examen del alumno
+{% endblock titulo %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'assets/css/lib/datatable/dataTables.bootstrap.min.css' %}">
+{% endblock extra_css %}
+
+ {% block body %}     
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-8">
+                    <strong class="card-title">Inscripcion a examen del alumno </strong>
+                </div>                
+            </div>
+            
+        </div>
+        <div class="table-stats order-table ov-h"> 
+            <form action="{% url 'institucion:crear_inscripcion_examen_alumno' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %} 
+                <div class="col col-md-3">Alumno: </div>
+                <div class="row form-group">
+                    {% for alumno in alumnos %}                                
+                        <div class="col-12 col-md-9">                        
+                            <input type="text" name="alumno" value="{{ alumno.apellido }}" class="form-control" readonly >  
+                        </div>                        
+                    {% endfor %}
+                </div>
+                <div class="row form-group">
+                    <div class="col col-md-3">Seleccione la materia a la que se quiere inscribir Materia: </div>
+                    {% for materia in materias %}
+                        {% for inscripcion in ins %}
+                            {% if inscripcion.id_materia == materia %}
+                            <input type="submit" name="materia" class="btn btn-primary" value="{{ materia }}">
+                            
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+                
+            </form>
+        </div>
+    </div>   
+{% endblock body %}
+
+

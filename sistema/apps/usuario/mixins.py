@@ -62,6 +62,24 @@ class ValidarProfesor(object):
                 messages.error(request, 'No tienes permisos para realizar esta acción.') 
         return redirect('index')
 
+class ValidarProfesorP(object):
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            if request.user.tipo == "Profesor":
+                return super().dispatch(request, *args, **kwargs)
+            else:
+                messages.error(request, 'No tienes permisos para realizar esta acción.') 
+        return redirect('index')
+
+class ValidarProfesorA(object):
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            if request.user.tipo == "Profesor" or request.user.tipo == "Alumno":
+                return super().dispatch(request, *args, **kwargs)
+            else:
+                messages.error(request, 'No tienes permisos para realizar esta acción.') 
+        return redirect('index')
+
 
 class ValidarAdministrador(object):
     def dispatch(self, request, *args, **kwargs):

@@ -26,7 +26,9 @@ function listadoAlumnos(){
                 fila += '<td> <button type = "button" class = "btn btn-primary btn-sm tableButton"';
                 fila += ' onclick = "abrir_modal_edicion(\'/institucion/editar_alumno/' + response[i]['pk']+'/\');"> EDITAR </button>';
                 fila += '<button type = "button" class = "btn btn-danger tableButton btn-sm"';
-                fila += 'onclick = "abrir_modal_eliminacion(\'/institucion/eliminar_alumno/'+ response[i]['pk']+'/\');"> ELIMINAR </button> </td>';
+                fila += 'onclick = "abrir_modal_eliminacion(\'/institucion/eliminar_alumno/'+ response[i]['pk']+'/\');"> ELIMINAR </button>';
+                fila += '<button type = "button" class = "btn btn-info tableButton btn-sm"';
+                fila += 'onclick="location.href=(\'/institucion/mensajead/'+ response[i]['pk']+'/\');"> ENVIAR MENSAJE </button> </td>';
                 fila += '</tr>';
                 $('#tabla_alumnos tbody').append(fila);
             }             
@@ -89,6 +91,60 @@ function listadoAlumno(){
                 $('#tabla_alumno tbody').append(fila);
             }             
             $('#tabla_alumno').DataTable({
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                      "first": "Primero",
+                      "last": "Ultimo",
+                      "next": "Siguiente",
+                      "previous": "Anterior"
+                    },
+                  },
+            });
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+}
+function listadoAlumnop(){
+    $.ajax({
+        url: "/institucion/listar_alumnop/",
+        type: "get",
+        dataType: "json",
+        success: function(response){
+            if($.fn.DataTable.isDataTable('#tabla_alumnop')){
+                $('#tabla_alumnop').DataTable().destroy();
+            }
+            $('#tabla_alumnop tbody').html("");
+            for(let i = 0;i < response.length;i++){
+                let fila = '<tr>';
+                fila += '<td>' + (i+1) + '</td>';
+                fila += '<td>' + response[i]["fields"]['nombre'] + '</td>';
+                fila += '<td>' + response[i]["fields"]['apellido'] + '</td>';
+                fila += '<td>' + response[i]["fields"]['email'] + '</td>';
+                if (response[i]["fields"]['id_carrera'] == ''){
+                    fila += '<td> Desconocido </td>';
+                } else {
+                    fila += '<td>' + response[i]["fields"]['id_carrera'] + '</td>';       
+                }
+                fila += '<td> <button type = "button" class = "btn btn-info tableButton btn-sm"';
+                fila += 'onclick="location.href=(\'/institucion/mensaje/'+ response[i]['pk']+'/\');"> ENVIAR MENSAJE </button> </td>';
+                fila += '</tr>';
+                $('#tabla_alumnop tbody').append(fila);
+            }             
+            $('#tabla_alumnop').DataTable({
                 language: {
                     "decimal": "",
                     "emptyTable": "No hay información",
@@ -180,4 +236,5 @@ function eliminar(pk){
 $(document).ready(function(){
     listadoAlumnos();
     listadoAlumno();
+    listadoAlumnop();
 });

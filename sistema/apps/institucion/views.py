@@ -5,7 +5,7 @@ from django.core.serializers import serialize
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect,HttpResponse,JsonResponse, request
 from django.views.generic import View,TemplateView,ListView,UpdateView,CreateView,DeleteView,DetailView
-from apps.usuario.mixins import LoginYSuperStaffMixin,ValidarPermisosMixin,LoginMixin,ValidarAlumno,ValidarAlumnoA,ValidarAdministrador,ValidarProfesor
+from apps.usuario.mixins import LoginYSuperStaffMixin,ValidarPermisosMixin,LoginMixin,ValidarAlumno,ValidarAlumnoA,ValidarAdministrador,ValidarProfesor,ValidarProfesorP,ValidarProfesorA
 from apps.usuario.models import Usuario
 from .models import *
 from .forms import *
@@ -57,9 +57,14 @@ class InicioCurso(ValidarAdministrador, TemplateView):
     template_name = 'institucion/curso/listar_curso.html'
     permission_required = ('institucion.view_curso', 'institucion.add_curso',
                            'institucion.delete_curso', 'institucion.change_curso')
-#el profesor no podria modificar datos del alumno, me falta poner eso
-class InicioAlumno(ValidarProfesor, TemplateView):
+
+class InicioAlumno(ValidarAdministrador, TemplateView):
     template_name = 'institucion/alumno/listar_alumno.html'
+    permission_required = ('institucion.view_alumno', 'institucion.add_alumno',
+                           'institucion.delete_alumno', 'institucion.change_alumno')
+
+class InicioAlumnop(ValidarProfesorP, TemplateView):
+    template_name = 'institucion/alumno/listar_alumnop.html'
     permission_required = ('institucion.view_alumno', 'institucion.add_alumno',
                            'institucion.delete_alumno', 'institucion.change_alumno')
 
@@ -72,9 +77,14 @@ class InicioCarrera(ValidarAdministrador, TemplateView):
     template_name = 'institucion/carrera/listar_carrera.html'
     permission_required = ('institucion.view_carrera', 'institucion.add_carrera',
                            'institucion.delete_carrera', 'institucion.change_carrera')
-#falta poner un horrario que puedan ver todos pero no puedan modificarlo
+
 class InicioHorario(ValidarAdministrador, TemplateView):
     template_name = 'institucion/horario/listar_horario.html'
+    permission_required = ('institucion.view_horario', 'institucion.add_horario',
+                           'institucion.delete_horario', 'institucion.change_horario')
+
+class InicioHorariot(ValidarProfesorA, TemplateView):
+    template_name = 'institucion/horario/listar_horariot.html'
     permission_required = ('institucion.view_horario', 'institucion.add_horario',
                            'institucion.delete_horario', 'institucion.change_horario')
 
@@ -90,7 +100,12 @@ class InicioInscripcionProfesor(ValidarAdministrador, TemplateView):
 #falta hacer una inscripcion pero solo para el alumno usuario
 class InicioInscripcionExamen(ValidarAdministrador, TemplateView):
     template_name = 'institucion/inscripcionexamen/listar_inscripcion_examenes.html'
-    permission_required = ('institucion.view_inscripcionexamenr', 'institucion.add_inscripcionexamen',
+    permission_required = ('institucion.view_inscripcionexamen', 'institucion.add_inscripcionexamen',
+                           'institucion.delete_inscripcionexamen', 'institucion.change_inscripcionexamen')
+
+class InicioInscripcionExamenAlumno(ValidarAlumno, TemplateView):
+    template_name = 'institucion/inscripcionexamen/listar_inscripcion_examenes_alumno.html'
+    permission_required = ('institucion.view_inscripcionexamen', 'institucion.add_inscripcionexamen',
                            'institucion.delete_inscripcionexamen', 'institucion.change_inscripcionexamen')
 
 class InicioMateria(ValidarAdministrador, TemplateView):
@@ -98,18 +113,33 @@ class InicioMateria(ValidarAdministrador, TemplateView):
     permission_required = ('institucion.view_materia', 'institucion.add_materia',
                            'institucion.delete_materia', 'institucion.change_materia')
 
+class InicioMateriat(ValidarProfesorA, TemplateView):
+    template_name = 'institucion/materia/listar_materiat.html'
+    permission_required = ('institucion.view_materia', 'institucion.add_materia',
+                           'institucion.delete_materia', 'institucion.change_materia')
+#que el profesor solo puedar ver las notas en la que el da clases
 class InicioNotas(ValidarProfesor, TemplateView):
     template_name = 'institucion/notas/listar_notas.html'
     permission_required = ('institucion.view_notas', 'institucion.add_notas',
                            'institucion.delete_notas', 'institucion.change_notas')
-#tengo que hacer que el profesor no pueda modificar datos del profesor
-class InicioProfesor(ValidarProfesor, TemplateView):
+
+class InicioProfesor(ValidarAdministrador, TemplateView):
     template_name = 'institucion/profesor/listar_profesor.html'
     permission_required = ('institucion.view_profesor', 'institucion.add_profesor',
                            'institucion.delete_profesor', 'institucion.change_profesor')
 
-class InicioProfesores(ValidarProfesor, TemplateView):
+class InicioProfesores(ValidarProfesorP, TemplateView):
     template_name = 'institucion/profesor/estado_profesor.html'
+    permission_required = ('institucion.view_profesor', 'institucion.add_profesor',
+                           'institucion.delete_profesor', 'institucion.change_profesor')
+
+class InicioProfesort(ValidarProfesorP, TemplateView):
+    template_name = 'institucion/profesor/listar_profesort.html'
+    permission_required = ('institucion.view_profesor', 'institucion.add_profesor',
+                           'institucion.delete_profesor', 'institucion.change_profesor')
+
+class InicioProfesorAl(ValidarAlumno, TemplateView):
+    template_name = 'institucion/profesor/listar_profesoral.html'
     permission_required = ('institucion.view_profesor', 'institucion.add_profesor',
                            'institucion.delete_profesor', 'institucion.change_profesor')
 
@@ -242,6 +272,26 @@ class ListadoHorarios(ValidarAdministrador,View):
         else:
             return redirect('institucion:inicio_horario')
 
+class ListadoHorariost(ValidarProfesorA,View):
+    model = Horario
+    permission_required = ('institucion.view_horario', 'institucion.add_horario',
+                           'institucion.delete_horario', 'institucion.change_horario')  
+
+    def get_queryset(self):
+        return self.model.objects.filter(estado = True)  
+
+    def get_context_data(self,**kwargs):
+        contexto= {}
+        contexto ['horarios'] = self.get_queryset()
+        contexto['form'] = self.form_class
+        return contexto
+    
+    def get(self,request,*args,**kwargs):
+        if request.is_ajax():            
+            return HttpResponse(serialize('json', self.get_queryset(),use_natural_foreign_keys = True), 'application/json')
+        else:
+            return redirect('institucion:inicio_horariot')
+
 class ActualizarHorario(ValidarAdministrador,UpdateView):
     model = Horario
     form_class = HorarioForm
@@ -337,7 +387,6 @@ class CrearHorario(ValidarAdministrador,CreateView):
                 return response
         else:
             return  redirect ( 'institucion: inicio_horario' )
-
 class EliminarHorario(ValidarAdministrador,DeleteView):
     model = Horario
     template_name = 'institucion/horario/eliminar_horario.html'
@@ -356,8 +405,7 @@ class EliminarHorario(ValidarAdministrador,DeleteView):
             return response            
         else: 
             return redirect('institucion:inicio_horario')
-#el profesor no podria eliminar o actualizar datos del alumno, tendria que crear otro listar
-class ListadoAlumnos(ValidarProfesor,View):
+class ListadoAlumnos(ValidarAdministrador,View):
     model = Alumno
     permission_required = ('institucion.view_alumno', 'institucion.add_alumno',
                            'institucion.delete_alumno', 'institucion.change_alumno')  
@@ -376,6 +424,26 @@ class ListadoAlumnos(ValidarProfesor,View):
             return HttpResponse(serialize('json', self.get_queryset(),use_natural_foreign_keys = True), 'application/json')
         else:
             return redirect('institucion:inicio_alumno')
+
+class ListadoAlumnop(ValidarProfesorP,View):
+    model = Alumno
+    permission_required = ('institucion.view_alumno', 'institucion.add_alumno',
+                           'institucion.delete_alumno', 'institucion.change_alumno')  
+
+    def get_queryset(self):
+        return self.model.objects.filter(estado = True)  
+
+    def get_context_data(self,**kwargs):
+        contexto= {}
+        contexto ['alumnos'] = self.get_queryset()
+        contexto['form'] = self.form_class
+        return contexto
+    
+    def get(self,request,*args,**kwargs):
+        if request.is_ajax():            
+            return HttpResponse(serialize('json', self.get_queryset(),use_natural_foreign_keys = True), 'application/json')
+        else:
+            return redirect('institucion:inicio_alumnop')
 
 class ActualizarAlumno(ValidarAlumnoA,UpdateView):
     model = Alumno
@@ -1288,7 +1356,7 @@ class EliminarAdministrador(ValidarAdministrador,DeleteView):
             return response
         return redirect('institucion:inicio_administrador')
 
-class ListadoProfesores(ValidarProfesor,ListView):
+class ListadoProfesores(ValidarAdministrador,ListView):
     model = Profesor
     permission_required = ('institucion.view_profesor', 'institucion.add_profesor',
                            'institucion.delete_profesor', 'institucion.change_profesor')  
@@ -1307,7 +1375,47 @@ class ListadoProfesores(ValidarProfesor,ListView):
             return HttpResponse(serialize('json', self.get_queryset(),use_natural_foreign_keys = True), 'application/json')
         else:
             return redirect('institucion:inicio_profesor')
-#falta un actualizar 2 para los datos del usuario que use el profesor
+
+class ListadoProfesorest(ValidarProfesorP,ListView):
+    model = Profesor
+    permission_required = ('institucion.view_profesor', 'institucion.add_profesor',
+                           'institucion.delete_profesor', 'institucion.change_profesor')  
+
+    def get_queryset(self):
+        return self.model.objects.filter(estado = True)  
+
+    def get_context_data(self,**kwargs):
+        contexto= {}
+        contexto ['profesores'] = self.get_queryset()
+        contexto['form'] = self.form_class
+        return contexto
+    
+    def get(self,request,*args,**kwargs):
+        if request.is_ajax():            
+            return HttpResponse(serialize('json', self.get_queryset(),use_natural_foreign_keys = True), 'application/json')
+        else:
+            return redirect('institucion:inicio_profesort')
+
+class ListadoProfesoresal(ValidarAlumno,ListView):
+    model = Profesor
+    permission_required = ('institucion.view_profesor', 'institucion.add_profesor',
+                           'institucion.delete_profesor', 'institucion.change_profesor')  
+
+    def get_queryset(self):
+        return self.model.objects.filter(estado = True)  
+
+    def get_context_data(self,**kwargs):
+        contexto= {}
+        contexto ['profesores'] = self.get_queryset()
+        contexto['form'] = self.form_class
+        return contexto
+    
+    def get(self,request,*args,**kwargs):
+        if request.is_ajax():            
+            return HttpResponse(serialize('json', self.get_queryset(),use_natural_foreign_keys = True), 'application/json')
+        else:
+            return redirect('institucion:inicio_profesoral')
+
 class ActualizarProfesor(ValidarAdministrador,UpdateView):
     model = Profesor
     form_class = ProfesorForm
@@ -1397,6 +1505,96 @@ class ActualizarProfesor(ValidarAdministrador,UpdateView):
                 return response
         else: 
             return redirect('institucion:inicio_profesor')
+
+class ActualizarProfesor2(ValidarProfesorP,UpdateView):
+    model = Profesor
+    form_class = Profesor2Form
+    second_model = Alumno
+    third_model = Usuario
+    fourth_model = Administrador
+    template_name = 'institucion/profesor/profesor2.html'
+    permission_required = ('institucion.view_profesor', 'institucion.add_profesor',
+                           'institucion.delete_profesor', 'institucion.change_profesor')
+    def post(self,request,*args,**kwargs):
+        a=0
+        if request.is_ajax():
+            form = self.form_class(data = request.POST,files = request.FILES,instance = self.get_object())
+            if form.is_valid():
+                nuevo= Profesor(
+                    id_profesor=form.instance.id_profesor,
+                    dni=form.cleaned_data.get('dni'),
+                    email=form.cleaned_data.get('email'),
+                    nombre=form.cleaned_data.get('nombre'),
+                    apellido=form.cleaned_data.get('apellido')
+                )
+
+                profesor = self.model.objects.all()
+                alumno = self.second_model.objects.all()
+                administrador = self.fourth_model.objects.all()
+
+                for k in range(len(administrador)):
+                    if administrador[k].estado == True:
+                        if nuevo.email == administrador[k].email:
+                            a=1
+                            mensaje = f'{self.model.__name__} no se ha podido registrar porque ya existe un usuario con ese DNI o Email!'
+                            error = form.errors
+                            response = JsonResponse({'mensaje':mensaje,'error':error})
+                            response.status_code = 400
+                            return response
+
+                for j in range(len(alumno)):
+                    if alumno[j].estado == True:
+                        if nuevo.dni == alumno[j].dni or nuevo.email == alumno[j].email:
+                            a=1
+                            mensaje = f'{self.model.__name__} no se ha podido registrar porque ya existe un usuario con ese DNI o Email!'
+                            error = form.errors
+                            response = JsonResponse({'mensaje':mensaje,'error':error})
+                            response.status_code = 400
+                            return response
+                
+                for i in range(len(profesor)):
+                    if profesor[i].estado == True:
+                        if nuevo.dni == profesor[i].dni or nuevo.email == profesor[i].email:
+                            if nuevo.id_profesor == profesor[i].id_profesor:
+                                a=0
+                            else:
+                                a=1
+                                mensaje = f'{self.model.__name__} no se ha podido registrar porque ya existe un usuario con ese DNI o Email!'
+                                error = form.errors
+                                response = JsonResponse({'mensaje':mensaje,'error':error})
+                                response.status_code = 400
+                                return response 
+
+                
+               
+                if a==0:
+                    prof = self.model.objects.all()
+                    usua = self.third_model.objects.all()
+                    for i in range(len(prof)):
+                        if prof[i].estado == True:  
+                            if nuevo.id_profesor == prof[i].id_profesor:   
+                                for j in range(len(usua)):
+                                    if usua[j].is_active == True:  
+                                        if prof[i].email ==usua[j].email:                                           
+                                            usua[j].email=nuevo.email
+                                            usua[j].nombre=nuevo.nombre
+                                            usua[j].apellido=nuevo.apellido                                             
+                                            usua[j].save() 
+                                            form.save()                                           
+                                            mensaje = f'{self.model.__name__} registrado correctamente!'
+                                            error = 'No hay error!'
+                                            response = JsonResponse({'mensaje':mensaje,'error':error})
+                                            response.status_code = 201
+                                            return response
+                                
+            else:
+                mensaje = f'{self.model.__name__} no se ha podido registrar!'
+                error = form.errors
+                response = JsonResponse({'mensaje':mensaje,'error':error})
+                response.status_code = 400
+                return response
+        else: 
+            return redirect('institucion:inicio_profesores')            
 
 class CrearProfesor(ValidarAdministrador,CreateView):
     model = Profesor
@@ -1534,6 +1732,26 @@ class ListadoMaterias(ValidarAdministrador,View):
             return HttpResponse(serialize('json', self.get_queryset(),use_natural_foreign_keys = True), 'application/json')
         else:
             return redirect('institucion:inicio_materia')
+
+class ListadoMateriast(ValidarProfesorA,View):
+    model = Materia
+    permission_required = ('institucion.view_materia', 'institucion.add_materia',
+                           'institucion.delete_materia', 'institucion.change_materia')  
+
+    def get_queryset(self):
+        return self.model.objects.filter(estado = True)  
+
+    def get_context_data(self,**kwargs):
+        contexto= {}
+        contexto ['materias'] = self.get_queryset()
+        contexto['form'] = self.form_class
+        return contexto
+    
+    def get(self,request,*args,**kwargs):
+        if request.is_ajax():            
+            return HttpResponse(serialize('json', self.get_queryset(),use_natural_foreign_keys = True), 'application/json')
+        else:
+            return redirect('institucion:inicio_materiat')
 
 class ActualizarMateria(ValidarAdministrador,UpdateView):
     model = Materia
@@ -2767,7 +2985,6 @@ class PromedioNotasFinalAlumno(ValidarAlumno,View):
         else:
             #return redirect('institucion:PromedioNotasFinalAlumno')
             return render(request,'institucion/porcentaje/promedio_notas_alumno.html')
-
  
 class ListadoPromedioNotasParcial(ValidarProfesor,ListView):
     model = PromedioNotasParcial
@@ -2844,6 +3061,102 @@ def contactar(request):
         return render(request,'institucion/mensaje/contactoExitoso.html')
     return render(request,'institucion/mensaje/formularioContacto.html')
 
+class Mensaje(ValidarProfesor,DetailView):
+    template_name = 'institucion/mensaje/mensaje.html'
+    model = Alumno
+    
+    def post(self,request,*args,**kwargs):                 
+        pk = self.kwargs.get('pk')
+        alumno = self.model.objects.filter(id_alumno= pk) 
+
+        if request.method == "POST":
+            asunto = request.POST["txtAsunto"]
+            mensaje = request.POST["txtMensaje"]
+            email_desde = settings.EMAIL_HOST_USER
+
+        for i in range(len(alumno)):
+            if alumno[i].estado == True:
+                if alumno[i].id_alumno == pk:
+                    email_para= "sistema.academico.ipes@gmail.com",alumno[i].email
+                    send_mail(asunto,mensaje,email_desde,email_para, fail_silently=False)
+                                                        
+        return render(request,'institucion/alumno/listar_alumnop.html')  
+
+class MensajeAd(ValidarProfesor,DetailView):
+    template_name = 'institucion/mensaje/mensajead.html'
+    model = Alumno
+    
+    def post(self,request,*args,**kwargs):                 
+        pk = self.kwargs.get('pk')
+        alumno = self.model.objects.filter(id_alumno= pk) 
+
+        if request.method == "POST":
+            asunto = request.POST["txtAsunto"]
+            mensaje = request.POST["txtMensaje"]
+            email_desde = settings.EMAIL_HOST_USER
+
+        for i in range(len(alumno)):
+            if alumno[i].estado == True:
+                if alumno[i].id_alumno == pk:
+                    email_para= "sistema.academico.ipes@gmail.com",alumno[i].email
+                    send_mail(asunto,mensaje,email_desde,email_para, fail_silently=False)
+                                                        
+        return render(request,'institucion/alumno/listar_alumno.html')
+class MensajeA(ValidarProfesorP,DetailView):
+    template_name = 'institucion/mensaje/mensajea.html'
+    model = Profesor
+    
+    def post(self,request,*args,**kwargs):                 
+        pk = self.kwargs.get('pk')
+        profesor = self.model.objects.filter(id_profesor= pk) 
+
+        profesor2= self.model.objects.filter(id_usuario=self.request.user,estado=True)  
+
+
+        if request.method == "POST":
+            asunto = request.POST["txtAsunto"]
+            mensaje = request.POST["txtMensaje"]
+            #email_desde = settings.EMAIL_HOST_USER
+
+        for i in range(len(profesor)):
+            if profesor[i].estado == True:
+                if profesor[i].id_profesor == pk:
+                    print("entro1")
+                    for j in range(len(profesor2)):
+                        if profesor2[j].estado == True:
+                            email_desde = profesor2[j].email
+                            email_para= "sistema.academico.ipes@gmail.com",profesor[i].email
+                            send_mail(asunto,mensaje,email_desde,email_para, fail_silently=False)
+                                                        
+        return render(request,'institucion/profesor/listar_profesort.html')
+
+class MensajeAl(ValidarProfesorA,DetailView):
+    template_name = 'institucion/mensaje/mensajeal.html'
+    model = Profesor
+    second_model = Alumno
+    
+    def post(self,request,*args,**kwargs):                 
+        pk = self.kwargs.get('pk')
+        profesor = self.model.objects.filter(id_profesor= pk) 
+
+        alumno= self.second_model.objects.filter(id_usuario=self.request.user,estado=True)  
+        
+
+        if request.method == "POST":
+            asunto = request.POST["txtAsunto"]
+            mensaje = request.POST["txtMensaje"]
+            #email_desde = settings.EMAIL_HOST_USER
+        for i in range(len(profesor)):
+            if profesor[i].estado == True:
+                if profesor[i].id_profesor == pk:
+                    for j in range(len(alumno)):
+                        if alumno[j].estado == True:
+                            email_desde = alumno[j].email
+                            email_para= "sistema.academico.ipes@gmail.com",profesor[i].email
+                            send_mail(asunto,mensaje,email_desde,email_para, fail_silently=False)
+                                                        
+        return render(request,'institucion/profesor/listar_profesoral.html')
+
 class EnviarMensaje(LoginYSuperStaffMixin, ValidarPermisosMixin,ListView):
     template_name = 'institucion/mensaje/enviar_mensaje.html'
     model = Alumno
@@ -2883,8 +3196,6 @@ class EnviarMensaje(LoginYSuperStaffMixin, ValidarPermisosMixin,ListView):
         #else:
          #   return  redirect ( 'institucion: inicio_alumno' )
 
-#eliminar atributo id materia de profesor, crear una clase que diga inscricpion de porfesor, en donde tiene el id de materia,id de profesor, curso
-#registrar inscripcion a examen final con 2 dias de anticipacion
 class MensajeAdvertencia(LoginYSuperStaffMixin, ValidarPermisosMixin,ListView):
     template_name = 'institucion/mensaje/mensaje_advertencia.html'
     model = Alumno
@@ -3220,6 +3531,142 @@ class CrearInscripcionExamen(ValidarAdministrador,CreateView):
         else:
             return  redirect ( 'institucion: inicio_inscripcion_examen' )
 
+class CrearInscripcionExamenAlumno(ValidarAlumno,CreateView):
+    model = InscripcionExamen
+    form_class = InscripcionExamenAlumnoForm
+    second_model = Inscripcion
+    second_form_class = InscripcionForm
+    third_model= Notas
+    fourth_model= Fecha
+    fifth_model = Alumno
+    sixth_model = Materia
+    template_name = 'institucion/inscripcionexamen/crear_inscripcion_examen_alumno.html'
+    permission_required = ('institucion.view_inscripcionexamen', 'institucion.add_inscripcionexamen',
+                           'institucion.delete_inscripcionexamen', 'institucion.change_inscripcionexamen')
+    #podria enviar un pk al form y despues comparar con los datos que tiene y poder enviar solo los datos del usuario
+    @method_decorator(csrf_exempt)
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+        
+    def get_context_data(self,**kwargs):
+        a=self.fifth_model.objects.filter(id_usuario=self.request.user,estado = True)
+        m = self.sixth_model.objects.all()
+        for i in range(len(a)):
+            if a[i].estado == True:
+                ins=self.second_model.objects.filter(id_alumno=a[i],estado = True)
+        
+        context = super().get_context_data(**kwargs)#llamo a todos lo kwargs
+        context["ins"] = ins
+        context["alumnos"] = self.fifth_model.objects.filter(id_usuario=self.request.user,estado = True)#guardo todos los valor de inscripcion
+        context["materias"] = self.sixth_model.objects.all()
+        return context
+    
+    def post(self,request,*args,**kwargs):
+        a=0
+        b=0
+        c=0
+        
+        alu = request.POST.get('alumno')
+        mat = request.POST.get('materia')
+        aux=""
+        aux2=""
+        alumno=self.fifth_model.objects.filter(id_usuario=self.request.user,estado = True)
+        for i in range(len(alumno)):
+            if alumno[i].estado == True:
+                if alu == alumno[i].apellido:
+                    aux=alumno[i]
+
+        materia = self.sixth_model.objects.all()
+        for i in range(len(materia)):
+            if materia[i].estado == True:
+                if materia[i].materia == mat:
+                    aux2=materia[i]
+        nuevo= InscripcionExamen(
+                    id_alumno=aux,
+                    id_materia=aux2                    
+                )
+        print(nuevo.id_alumno)
+        print(nuevo.id_materia)
+        ahora = datetime.date.today()
+        ayer = ahora - datetime.timedelta(days=10)
+
+        inscripcionexamen = self.model.objects.all()
+        inscripcion = self.second_model.objects.all()
+        notas = self.third_model.objects.all()
+        fecha = self.fourth_model.objects.all()
+
+        for j in range(len(inscripcion)):
+            if inscripcion[j].estado == True:
+                for i in range(len(alumno)):
+                    if alumno[i].estado == True:
+                        if inscripcion[j].id_alumno == alumno[i]: 
+                            for i in range(len(materia)):
+                                if materia[i].estado == True:
+                                    if materia[i].materia == mat:
+                                        if inscripcion[j].id_materia == materia[i]:                      
+                                            a=1
+        if a==1:
+            for i in range(len(inscripcionexamen)):
+                if inscripcionexamen[i].estado == True:
+                    if inscripcionexamen[i].id_alumno == nuevo.id_alumno and inscripcionexamen[i].id_materia == nuevo.id_materia:
+                        mensaje = f'{self.model.__name__} no se ha podido registrar porque el alumno ya se inscribio a el examen!'
+                        response = JsonResponse({'mensaje':mensaje})
+                        response.status_code = 400
+                        #la otra opcion que me queda es hacer un nuevo html con el mensaje segun corresponda y despues redireccionar la pagina, luego de unos segundos
+                        #return response
+                        return render(request,'institucion/inscripcionexamen/listar_inscripcion_examenes_alumno.html') 
+                        #return  redirect ( 'institucion: inicio_inscripcion_examen' )
+                        #return response('institucion/inscripcionexamen/listar_inscripcion_examenes_alumno.html')
+                         
+
+            for j in range(len(notas)):
+                if notas[j].estado == True:
+                    if notas[j].id_alumno == nuevo.id_alumno and notas[j].id_materia == nuevo.id_materia:
+                        if notas[j].tipo == "Parcial":
+                            if notas[j].notas >=6:
+                                b=b+1
+                            else:
+                                mensaje = f'{self.model.__name__} no se ha podido registrar el alumno al examen porque le falta aprobar los parciales!'
+                                response = JsonResponse({'mensaje':mensaje})
+                                response.status_code = 400
+                                return response
+            if b==2:
+                for i in range(len(fecha)):
+                    if fecha[i].estado == True:
+                        if fecha[i].evento=="mesas":
+                            c=1
+                            if ahora < fecha[i].fecha_evento:
+                                dias_dies = fecha[i].fecha_evento - datetime.timedelta(days=10)
+                                dias_dos = fecha[i].fecha_evento - datetime.timedelta(days=2)                                
+                                if ahora >= dias_dies and ahora < dias_dos:
+                                    nuevo.save()
+                                    mensaje = f'{self.model.__name__} registrado correctamente!'
+                                    response = JsonResponse({'mensaje':mensaje})
+                                    response.status_code = 201
+                                    return response
+                                else:
+                                    mensaje = f'{self.model.__name__} no se ha podido registrar porque ya paso el tiempo para inscribirse al examen, espere al proximo llamada!'
+                                    response = JsonResponse({'mensaje':mensaje})
+                                    response.status_code = 400
+                                    return response
+                
+                
+            else:
+                mensaje = f'{self.model.__name__} no se ha podido registrar porque el alumno no aprobo los parciales!'
+                response = JsonResponse({'mensaje':mensaje})
+                response.status_code = 400
+                return response
+
+        else:
+            mensaje = f'{self.model.__name__} no se ha podido registrar porque no esta inscripcto a la materia!'
+            response = JsonResponse({'mensaje':mensaje})
+            response.status_code = 400
+            return response
+            
+        return render(request,'institucion/inscripcionexamen/listar_inscripcion_examenes_alumno.html') 
+
 
 class ListadoInscripcionExamenes(ValidarAdministrador,View):
     model = InscripcionExamen
@@ -3240,6 +3687,34 @@ class ListadoInscripcionExamenes(ValidarAdministrador,View):
             return HttpResponse(serialize('json', self.get_queryset(),use_natural_foreign_keys = True), 'application/json')
         else:
             return redirect('institucion:inicio_inscripcion_examen')
+
+class ListadoInscripcionExamenesAlumno(ValidarAlumno,View):
+    model = InscripcionExamen
+    second_model = Alumno
+    permission_required = ('institucion.view_inscripcionexamen', 'institucion.add_inscripcionexamen',
+                           'institucion.delete_inscripcionexamen', 'institucion.change_inscripcionexamen')  
+     
+    def get_queryset(self):
+        inscripcionexamen = self.model.objects.all()
+        alumno = self.second_model.objects.filter(id_usuario=self.request.user,estado = True)  
+        for i in range(len(alumno)):
+            if alumno[i].estado == True:
+                for j in range(len(inscripcionexamen)):
+                    if inscripcionexamen[j].estado == True:
+                        if alumno[i]==inscripcionexamen[j].id_alumno:
+                            return self.model.objects.filter(estado = True,id_alumno = alumno[i])                            
+
+    def get_context_data(self,**kwargs):
+        contexto= {}
+        contexto ['inscripcionexamenes'] = self.get_queryset()
+        contexto['form'] = self.form_class
+        return contexto
+    
+    def get(self,request,*args,**kwargs):
+        if request.is_ajax():            
+            return HttpResponse(serialize('json', self.get_queryset(),use_natural_foreign_keys = True), 'application/json')
+        else:
+            return redirect('institucion:inicio_inscripcion_examen_alumno')
 
 class ActualizarInscripcionExamen(ValidarAdministrador,UpdateView):
     model = InscripcionExamen
@@ -3332,15 +3807,33 @@ class EliminarInscripcionExamen(ValidarAdministrador,DeleteView):
     
     def delete(self,request,pk,*args,**kwargs):
         if request.is_ajax():
-            fecha = self.get_object()
-            fecha.estado = False
-            fecha.save()
+            inscripcionexamen = self.get_object()
+            inscripcionexamen.estado = False
+            inscripcionexamen.save()
             mensaje = f'{self.model.__name__} eliminado correctamente!'
             error = 'No hay error!'
             response = JsonResponse({'mensaje': mensaje, 'error': error})
             response.status_code = 201
             return response
         return redirect('institucion:inicio_inscripcion_examen')
+
+class EliminarInscripcionExamenAlumno(ValidarAlumno,DeleteView):    
+    model = InscripcionExamen
+    template_name = 'institucion/inscripcionexamen/eliminar_inscripcion_examen_alumno.html'
+    permission_required = ('institucion.view_inscripcionexamen', 'institucion.add_inscripcionexamen',
+                           'institucion.delete_inscripcionexamen', 'institucion.change_inscripcionexamen')
+    
+    def delete(self,request,pk,*args,**kwargs):
+        if request.is_ajax():
+            inscripcionexamen = self.get_object()
+            inscripcionexamen.estado = False
+            inscripcionexamen.save()
+            mensaje = f'{self.model.__name__} eliminado correctamente si!'
+            error = 'No hay error!'
+            response = JsonResponse({'mensaje': mensaje, 'error': error})
+            response.status_code = 201
+            return response
+        return redirect('institucion:inicio_inscripcion_examen_alumno')
 
 class EstadoAlumno(ValidarAlumno,View):
     model = Alumno
@@ -3367,7 +3860,7 @@ class EstadoAlumno(ValidarAlumno,View):
         else:
             return redirect('institucion:inicio_alumnos')
 
-class EstadoProfesor(ValidarProfesor,View):
+class EstadoProfesor(ValidarProfesorP,View):
     model =Profesor
     permission_required = ('institucion.view_profesor', 'institucion.add_profesor',
                            'institucion.delete_profesor', 'institucion.change_profesor')  

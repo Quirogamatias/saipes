@@ -3,6 +3,7 @@ from django import forms
 from django.db.models import fields
 from .models import *
 from apps.usuario.models import Usuario
+#import InscripcionExamenAlumnoForm.request
 
 class CursoForm(forms.ModelForm):
     class Meta:
@@ -442,7 +443,7 @@ class ProfesorForm(forms.ModelForm):
             'email': 'email del profesor ',
             'domicilio': 'domicilio del profesor',
             'telefono': 'telefono del profesor',
-            'notificacion': 'notificacion del Alumno',
+            'notificacion': 'notificacion del Profesor',
             'id_usuario': 'id_usuario',
 
         }
@@ -489,6 +490,69 @@ class ProfesorForm(forms.ModelForm):
                 }
             ),
             'id_usuario':forms.Select(
+                attrs = {
+                    'class':'form-control',
+                }
+            )
+        }
+
+class Profesor2Form(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        #self.fields['id_usuario'].queryset = Usuario.objects.filter(is_active = True)
+
+
+    class Meta:
+        model = Profesor
+        fields = ['dni','nombre','apellido','email','domicilio','telefono','notificacion']
+        labels = {
+            'dni': 'dni del profesor',
+            'nombre': 'nombre del profesor',
+            'apellido': 'apellido del profesor',
+            'email': 'email del profesor ',
+            'domicilio': 'domicilio del profesor',
+            'telefono': 'telefono del profesor',
+            'notificacion': 'notificacion del Profesor',
+
+        }
+        widgets = {
+            'dni': forms.TextInput(
+                attrs = {
+                    'class':'form-control',
+                    'readonly':'readonly'
+                }
+            ),
+            'nombre': forms.TextInput(
+                attrs = {
+                    'class':'form-control',
+                    'readonly':'readonly'
+                }
+            ),
+            'apellido':forms.TextInput(
+                attrs = {
+                    'class':'form-control',
+                    'readonly':'readonly'
+                }
+            ),
+            'email':forms.EmailInput(
+                attrs = {
+                    'class':'form-control',
+                    'placeholder':'Ingrese el email del profesor'
+                }
+            ),
+            'domicilio':forms.TextInput(
+                attrs = {
+                    'class':'form-control',
+                    'placeholder':'Ingrese el domicilio del profesor'
+                }
+            ),
+            'telefono':forms.TextInput(
+                attrs = {
+                    'class':'form-control',
+                    'placeholder':'Ingrese el telefono del profesor'
+                }
+            ),
+            'notificacion':forms.Select(
                 attrs = {
                     'class':'form-control',
                 }
@@ -825,6 +889,52 @@ class InscripcionExamenForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['id_alumno'].queryset = Alumno.objects.filter(estado = True)
+        self.fields['id_materia'].queryset = Materia.objects.filter(estado = True)
+
+    class Meta:
+        model = InscripcionExamen
+        fields = ['fecha','id_alumno','id_materia']
+        labels = {
+            'fecha': 'fecha',
+            'id_alumno': 'id_alumno',
+            'id_materia': 'id_materia',
+
+        }
+        widgets = {
+            'fecha': forms.SelectDateWidget(
+                attrs = {
+                    'class':'form-control',
+                    'placeholder':'Ingrese la fecha de inscripcion'
+                }
+            ),
+            'id_alumno': forms.Select(
+                attrs = {
+                    'class':'form-control',
+                }
+            ),
+            'id_materia':forms.Select(
+                attrs = {
+                    'class':'form-control',
+                }
+            )            
+        }
+
+class InscripcionExamenAlumnoForm(forms.ModelForm):
+    model = Alumno
+    #alumno = Alumno.objects.filter(id_usuario=self.request.user,estado = True)
+    #self.second_model.objects.filter(id_usuario=self.request.user,estado = True)  
+    
+    #for i in range(len(alumno)):
+     #   if alumno[i].estado == True:
+             
+    def __init__(self, *args, **kwargs):
+        #aux = Alumno.objects.filter(id_usuario=self.request.user,estado = True)
+        #print(aux)
+        #alumno = Alumno.objects.filter(estado = True)
+        super().__init__(*args, **kwargs)
+        #for i in range(len(alumno)):
+         #   if alumno[i].estado == True:
         self.fields['id_alumno'].queryset = Alumno.objects.filter(estado = True)
         self.fields['id_materia'].queryset = Materia.objects.filter(estado = True)
 
