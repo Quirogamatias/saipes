@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block titulo %}
-    Listado de Horarios
+    Listado de Notas
 {% endblock titulo %}
 
 {% block extra_css %}
@@ -14,20 +14,24 @@
         <div class="card-header">
             <div class="row">
                 <div class="col-md-8">
-                    <strong class="card-title">Listado de Horarios</strong>
+                    <strong class="card-title">Listado de Notas</strong>
+                </div>
+                <div class="col-md-4">
+                    <button  type="button" class="btn btn-primary" onclick="abrir_modal_creacion('{% url 'institucion:crear_notasp' %}')">Crear Notas</button>
                 </div>
             </div>
             
         </div>
         <div class="table-stats order-table ov-h">        
-        <table id="tabla_horariost" class="table">
+        <table id="tabla_notasp" class="table">
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Dia</th>
-                    <th>Hora de inicio</th>
-                    <th>Hora del fin</th>
-                    <th>Id del curso</th>
+                    <th>Notas</th>
+                    <th>Id de la materia</th>
+                    <th>Id del alumno</th>
+                    <th>Tipo</th>
+                    <th>Opciones</th>
                 </tr>
             </thead>
             <tbody>  
@@ -48,6 +52,5 @@
  {% block extrajs %}
  <script src="{% static 'assets/js/lib/data-table/datatables.min.js' %}"></script>
  <script src="{% static 'assets/js/lib/data-table/datatables.bootstrap.min.js' %}"></script>
- <script src="{% static 'assets/js/institucion/horario.js' %}"></script>
+ <script src="{% static 'assets/js/institucion/notas.js' %}"></script>
  {% endblock extrajs %}
- 

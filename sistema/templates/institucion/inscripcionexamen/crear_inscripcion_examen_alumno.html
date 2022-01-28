@@ -1,23 +1,10 @@
-{% extends 'index.html' %}
-{% load static %}
-
-{% block titulo %}
-Inscripcion a examen del alumno
-{% endblock titulo %}
-
-{% block extra_css %}
-    <link rel="stylesheet" href="{% static 'assets/css/lib/datatable/dataTables.bootstrap.min.css' %}">
-{% endblock extra_css %}
-
- {% block body %}     
-    <div class="card">
-        <div class="card-header">
-            <div class="row">
-                <div class="col-md-8">
-                    <strong class="card-title">Inscripcion a examen del alumno </strong>
-                </div>                
-            </div>
-            
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Creacion de Inscripcion Examen</h2>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
         <div class="table-stats order-table ov-h"> 
             <form action="{% url 'institucion:crear_inscripcion_examen_alumno' %}" method="POST" enctype="multipart/form-data">
@@ -31,12 +18,11 @@ Inscripcion a examen del alumno
                     {% endfor %}
                 </div>
                 <div class="row form-group">
-                    <div class="col col-md-3">Seleccione la materia a la que se quiere inscribir Materia: </div>
+                    <div class="col col-md-3">Seleccione la materia a la que se quiere inscribir: </div>
                     {% for materia in materias %}
                         {% for inscripcion in ins %}
                             {% if inscripcion.id_materia == materia %}
                             <input type="submit" name="materia" class="btn btn-primary" value="{{ materia }}">
-                            
                             {% endif %}
                         {% endfor %}
                     {% endfor %}
@@ -44,7 +30,6 @@ Inscripcion a examen del alumno
                 
             </form>
         </div>
-    </div>   
-{% endblock body %}
-
-
+        
+    </div>
+</div>

@@ -77,7 +77,7 @@ function listadoMateriast(){
                     fila += '<td>' + response[i]["fields"]['id_horario'] + '</td>';       
                 }
                 fila += '<td> <button type = "button" class = "btn btn-info tableButton btn-sm"';
-                fila += 'onclick="location.href=(\'/institucion/detalle_materia/'+ response[i]['pk']+'/\');"> DETALLE </button> </td>';
+                fila += 'onclick="location.href=(\'/institucion/detalle_materia_alumno/'+ response[i]['pk']+'/\');"> DETALLE </button> </td>';
                 
                 fila += '</tr>';
                 $('#tabla_materiast tbody').append(fila);

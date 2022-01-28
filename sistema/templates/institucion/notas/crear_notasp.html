@@ -1,0 +1,92 @@
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Creacion de Notas </h2>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form id="form_creacion" action="{% url 'institucion:crear_notas' %}" method="POST">
+            {% csrf_token %}
+            <div class="modal-body">
+                <div id="errores">
+
+                </div>
+                
+                <div class="row form-group">
+                    <div class="col col-md-3">{{ form.tipo.label }}</div>
+                    <div class="col-12 col-md-9">{{ form.tipo }}</div>
+                </div> 
+                <div class="row form-group">
+                    <div class="col col-md-3">{{ form.notas.label }}</div>
+                    <div class="col-12 col-md-9">{{ form.notas }}</div>
+                </div>
+                <div class="row form-group">
+                    <div class="col col-md-3">{{ form.id_materia.label }}</div>
+                    {% for materia in materias %}
+                            <input type="submit" name="materia" class="btn btn-primary" value="{{ materia }}">
+                            
+                    {% endfor %}
+                </div>
+                <div class="row form-group">
+                    <div class="col col-md-3">{{ form.id_alumno.label }}</div>
+                    <div class="col-12 col-md-9">{{ form.id_alumno }}</div>
+                </div> 
+                
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" onclick="cerrar_modal_creacion();">Cancelar</button>
+                <button id="boton_creacion" class="btn btn-primary" type="button" onclick="registrarp();">Confirmar</button>
+            </div>
+        </form>
+        
+    </div>
+</div>
+
+{% block extrajs %}
+ <script>
+     //me falta saber como hacer para seelccionar la materia y
+     //que me muestre los alumnos a los que puedo ponerle notas
+    $(function(){
+         $('select[name="materia"]').on('change',function(){
+             var id = $(this).val();
+             var select_alumno = $('select[name="id_alumno"]');
+             var options = '<option value="">------------</option>';
+             if (id === ''){
+                 select_alumno.html(options);
+                 return false;
+             }
+             console.log("va pasando")
+             $.ajax({
+                 url: '/institucion/crear_notasp/',
+                 type:'POST',
+                 data:{
+                     'action': 'search_tipo',
+                     'id': id                    
+                 },
+                 dataType: 'json',          
+             }).done(function (data){  
+                /*console.log(data); */   
+                 if (!data.hasOwnProperty("'error'")){
+                    console.log(data)
+                     /* me funcion cuando puse "'error'" en vez de 'error'*/                    
+                     $.each(data, function (key,value){ 
+                                              
+                        /*console.log(value)  
+                        alert(value)   */                                
+                        options+='<option value="'+value.id+'">'+"Apellido "+value.apellido +", Nombre  "+ value.nombre+'</option>';
+                        console.log(value.id)
+                     });
+                     return false;                
+                 }
+                 
+                 message_error(data.error);
+             }).fail(function(jqXHR,textStatus,errorThrown){
+                 alert(textStatus + ':'+errorThrown);
+             }).always(function (data){           
+                 select_alumno.html(options);              
+             });            
+         });         
+     });        
+ </script>
+ {% endblock extrajs %}

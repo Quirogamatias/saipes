@@ -111,16 +111,7 @@
                                                    
                     </li>
                     {% endif %}
-                    {% if request.user.tipo == "Profesor" %}
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
-                                <i class="menu-icon fa fa-users"></i>Datos de Alumnos</a>
-                            <ul class="sub-menu children dropdown-menu">                                 
-                                <li><i class="fa fa-id-badge"></i><a href="{% url 'usuarios:listado_usuario_alumnos' %}">Listado de Alumnos</a></li>
-                            </ul>
-                                                   
-                    </li>
-                    {% endif %}
+                    
                     {% if request.user.tipo == "Administrador" or request.user.is_superuser %}
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Curso</a>
@@ -245,8 +236,14 @@
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Notas</a>
                         <ul class="sub-menu children dropdown-menu">
+                            {% if request.user.tipo == "Administrador" or request.user.is_superuser %}
                             <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_notas' %}">Listado Notas</a>
                             </li>
+                            {% endif %}
+                            {% if request.user.tipo == "Profesor" %}
+                            <li><i class="fa fa-table"></i><a href="{% url 'institucion:inicio_notasp' %}">Listado Notas</a>
+                            </li>
+                            {% endif %}
                         </ul>
                     </li> 
                     {% endif %}
@@ -259,7 +256,7 @@
                         </ul>
                     </li> 
                     {% endif %}
-                    {% if request.user.tipo == "Administrador" or request.user.tipo == "Profesor" or request.user.is_superuser %}
+                    {% if request.user.tipo == "Administrador"  or request.user.is_superuser %}
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Asistencia</a>
                         <ul class="sub-menu children dropdown-menu">                            
@@ -298,6 +295,7 @@
                             {% endif %}
                         </ul>
                     </li> 
+                    {% if request.user.tipo == "Profesor" or request.user.tipo == "Administrador" or request.user.is_superuser %} 
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Enviar Mensaje</a>
                         <ul class="sub-menu children dropdown-menu">                            
@@ -309,7 +307,7 @@
                             </li>
                         </ul>
                     </li> 
-                    
+                    {% endif %}
                    
                     
                 </ul>

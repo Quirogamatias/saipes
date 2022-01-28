@@ -1,0 +1,10 @@
+{% extends 'index.html' %}
+{% block titulo %}
+    Mensaje
+{% endblock titulo %}
+{% block body %}
+<form method="POST">
+   <p><strong>¡El alumno no se ha podido registrar porque no esta inscripcto a la materia!</strong></p>
+   <a class="btn btn-primary"  href="{% url 'institucion:listado_inscripcion_examenes_alumno' %}">volver a listado de Examen</a>
+</form>
+{% endblock body %}

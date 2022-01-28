@@ -24,11 +24,11 @@
             {% csrf_token %} 
             <p>
                 Asunto:
-                <input type="text" name="txtAsunto" value="mensaje para alumnos desaprobados">
+                <input type="text" name="txtAsunto" readonly value="mensaje para alumnos desaprobados">
             </p>
             <p>
                 Mensaje
-                <textarea name="txtMensaje" cols="30" rows="5" style="resize: none;"> la cual es menor a 6 y tendra que recuperar el pacial</textarea>
+                <textarea name="txtMensaje" cols="30" rows="5" style="resize: none;" readonly > la cual es menor a 6 y tendra que recuperar el pacial</textarea>
 
             </p>
             <input type="submit" value="Enviar">

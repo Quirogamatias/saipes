@@ -24,11 +24,11 @@
             {% csrf_token %} 
             <p>
                 Asunto:
-                <input type="text" name="txtAsunto" value="Mensaje de advertencia de asistencia de materia">
+                <input type="text" name="txtAsunto" readonly value="Mensaje de advertencia de asistencia de materia">
             </p>
             <p>
                 Mensaje
-                <textarea name="txtMensaje" cols="30" rows="5" style="resize: none;">, tiene una asistencia menor al 75% de la </textarea>
+                <textarea name="txtMensaje" cols="30" rows="5" style="resize: none;" readonly>, tiene una asistencia menor al 75% de la </textarea>
 
             </p>
             <input type="submit" value="Enviar">
