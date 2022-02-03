@@ -22,63 +22,13 @@ function listadoPorcentaje(){
                     fila += '<td>' + response[i]["fields"]['id_alumno'] + '</td>';       
                 }
                 fila += '<td>' + response[i]["fields"]['promedio'] + '</td>';
+                fila += '<td> <button type = "button" class = "btn btn-primary btn-sm tableButton"';
+                fila += ' onclick = "abrir_modal_edicion(\'/institucion/editar_porcentaje/' + response[i]['pk']+'/\');"> EDITAR </button>';
+                fila += '<button type = "button" class = "btn btn-danger tableButton btn-sm"';
+                fila += 'onclick = "abrir_modal_eliminacion(\'/institucion/eliminar_porcentaje/'+ response[i]['pk']+'/\');"> ELIMINAR </button></td>';
+                
                 fila += '</tr>';
                 $('#tabla_porcentajes tbody').append(fila);
-            }             
-            $('#tabla_porcentajes').DataTable({
-                language: {
-                    "decimal": "",
-                    "emptyTable": "No hay información",
-                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
-                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
-                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-                    "infoPostFix": "",
-                    "thousands": ",",
-                    "lengthMenu": "Mostrar _MENU_ Entradas",
-                    "loadingRecords": "Cargando...",
-                    "processing": "Procesando...",
-                    "search": "Buscar:",
-                    "zeroRecords": "Sin resultados encontrados",
-                    "paginate": {
-                      "first": "Primero",
-                      "last": "Ultimo",
-                      "next": "Siguiente",
-                      "previous": "Anterior"
-                    },
-                  },
-            });
-        },
-        error: function(error){
-            console.log(error);
-        }
-    });
-}
-function listadoPorcentajes(){
-    $.ajax({
-        url: "/institucion/promedio_asistencia_alumno/",
-        type: "get",
-        dataType: "json",
-        success: function(response){
-            if($.fn.DataTable.isDataTable('#tabla_porcentaje')){
-                $('#tabla_porcentaje').DataTable().destroy();
-            }
-            $('#tabla_porcentaje tbody').html("");
-            for(let i = 0;i < response.length;i++){
-                let fila = '<tr>';
-                fila += '<td>' + (i+1) + '</td>';
-                if (response[i]["fields"]['id_materia'] == ''){
-                    fila += '<td> Desconocido </td>';
-                } else {
-                    fila += '<td>' + response[i]["fields"]['id_materia'] + '</td>';       
-                }
-                if (response[i]["fields"]['id_alumno'] == ''){
-                    fila += '<td> Desconocido </td>';
-                } else {
-                    fila += '<td>' + response[i]["fields"]['id_alumno'] + '</td>';       
-                }
-                fila += '<td>' + response[i]["fields"]['promedio'] + '</td>';
-                fila += '</tr>';
-                $('#tabla_porcentaje tbody').append(fila);
             }             
             $('#tabla_porcentajes').DataTable({
                 language: {
@@ -171,5 +121,4 @@ function eliminar(pk){
 }
 $(document).ready(function(){
     listadoPorcentaje();
-    listadoPorcentajes();
 });

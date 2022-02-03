@@ -12,42 +12,7 @@
                 <div id="errores">
                 
                 </div>
-                <div class="form-group">
-                    <label for="{{form.nombre.name}}">{{form.nombre.label}}</label>
-                    {{form.nombre}}
-                </div>
-                <div class="form-group">
-                    <label for="{{form.apellido.name}}">{{form.apellido.label}}</label>
-                    {{form.apellido}}
-                </div>
-                <div class="form-group">
-                    <label for="{{form.email.name}}">{{form.email.label}}</label>
-                    {{form.email}}
-                </div>
-                <div class="form-group">
-                    <label for="{{form.domicilio.name}}">{{form.domicilio.label}}</label>
-                    {{form.domicilio}}
-                </div>
-                <div class="form-group">
-                    <label for="{{form.telefono.name}}">{{form.telefono.label}}</label>
-                    {{form.telefono}}
-                </div>
-                <div class="form-group">
-                    <label for="{{form.usuario.name}}">{{form2.tipo.label}}</label>
-                    {{form2.tipo}}
-                </div>
-                <div class="form-group">
-                    <label for="{{form2.username.name}}">{{form2.username.label}}</label>
-                    {{form2.username}}
-                </div>
-                <div class="form-group">
-                    <label for="{{form2.password1.name}}">{{form2.password1.label}}</label>
-                    {{form2.password1}}
-                </div>
-                <div class="form-group">
-                    <label for="{{form2.password2.name}}">{{form2.password2.label}}</label>
-                    {{form2.password2}}
-                </div>
+                {{ form.as_p }}
             </div>
             <div class="modal-footer">
                 <button class="btn btn-danger" type="button" onclick="cerrar_modal_creacion();">Cancelar</button>

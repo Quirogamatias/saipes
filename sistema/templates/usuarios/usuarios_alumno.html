@@ -23,9 +23,8 @@ Listado de Usuarios Alumnos
                     <a href="{% url 'usuarios:detalle_usuario_alumno' usuarios.pk  %}">
                         <div class="card">                            
                             <div class="card-body">
-                                <h4 class="card-title mb-3">{{ usuarios.apellido }}</h4>
-                                <p class="card-text">{{ usuarios.nombre }}</p>
-                                
+                                <h4 class="card-title mb-3">{{ usuarios.apellidos }}</h4>
+                                <p class="card-text">{{ usuarios.nombres }}</p>
                             </div>
                         </div>
                     </a>
@@ -33,7 +32,6 @@ Listado de Usuarios Alumnos
                 {% endfor %}
             </div>
         </div>
-        <a type="button" class="btn btn-primary" href="{% url 'usuarios:inicio_usuarios' %}">Volver</a>
 
         <div class="pagination">
             <span class="step-links">

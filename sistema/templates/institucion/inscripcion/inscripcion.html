@@ -12,18 +12,7 @@
                 <div id="erroresEdicion">
                 
                 </div>
-                <div class="row form-group">
-                    <div class="col col-md-3">{{ form.fecha_inscripcion.label }}</div>
-                    <div class="col-12 col-md-9">{{ form.fecha_inscripcion }}</div>
-                </div>
-                <div class="row form-group">
-                    <div class="col col-md-3">{{ form.id_materia.label }}</div>
-                    <div class="col-12 col-md-9">{{ form.id_materia }}</div>
-                </div>
-                <div class="row form-group">
-                    <div class="col col-md-3">{{ form.id_alumno.label }}</div>
-                    <div class="col-12 col-md-9">{{ form.id_alumno }}</div>
-                </div> 
+                {{ form.as_p }}
             </div>
             <div class="modal-footer">
                 <button class="btn btn-danger" type="button" onclick="cerrar_modal_edicion();">Cancelar</button>
@@ -32,48 +21,3 @@
         </form>        
     </div>
 </div>
-{% block extrajs %}
- <script>
-    $(function(){
-         $('select[name="id_materia"]').on('change',function(){
-             var id = $(this).val();
-             var select_alumno = $('select[name="id_alumno"]');
-             var options = '<option value="">------------</option>';
-             if (id === ''){
-                 select_alumno.html(options);
-                 return false;
-             }
-             $.ajax({
-                 url:  '/institucion/crear_inscripcion/',
-                 type:'POST',
-                 data:{
-                     'action': 'search_materia_id',
-                     'id': id                    
-                 },
-                 dataType: 'json',          
-             }).done(function (data){  
-                /*console.log(data); */   
-                 if (!data.hasOwnProperty("'error'")){
-                    console.log(data)
-                     /* me funcion cuando puse "'error'" en vez de 'error'*/                    
-                     $.each(data, function (key,value){ 
-                                              
-                        /*console.log(value)  
-                        alert(value)   */                                
-                         options+='<option value="'+value.id+'">'+"Apellido "+value.apellido +", Nombre "+ value.nombre+'</option>';
-                        console.log(value.id)
-                     });
-                     return false;                
-                 }
-                 
-                 message_error(data.error);
-             }).fail(function(jqXHR,textStatus,errorThrown){
-                 alert(textStatus + ':'+errorThrown);
-             }).always(function (data){ 
-                               
-                 select_alumno.html(options);              
-             });            
-         });         
-     });        
- </script>
- {% endblock extrajs %}

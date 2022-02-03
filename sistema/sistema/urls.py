@@ -20,8 +20,6 @@ from django.urls import path,include,re_path
 from django.contrib.auth.decorators import login_required
 from apps.usuario.views import Inicio,Login,logoutUsuario
 
-from django.config.urls.static import static
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,9 +28,9 @@ urlpatterns = [
     path('',Inicio.as_view(),name= 'index'),
     path('accounts/login/',Login.as_view(), name= 'login'),
     path('logout/',login_required(logoutUsuario),name= 'logout'),
-    
-]+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
+    
+]
 urlpatterns += [
     re_path(r'^media/(?P<path>.*)$', serve, {
         'document_root': settings.MEDIA_ROOT,

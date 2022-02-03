@@ -12,8 +12,8 @@ function listadoUsuarios(){
                 let fila = '<tr>';
                 fila += '<td>' + (i +1 ) + '</td>';
                 fila += '<td>' + response[i]["fields"]['username'] + '</td>';
-                fila += '<td>' + response[i]["fields"]['nombre'] + '</td>';
-                fila += '<td>' + response[i]["fields"]['apellido'] + '</td>';
+                fila += '<td>' + response[i]["fields"]['nombres'] + '</td>';
+                fila += '<td>' + response[i]["fields"]['apellidos'] + '</td>';
                 fila += '<td>' + response[i]["fields"]['email'] + '</td>';
                 fila += '<td><button type = "button" class = "btn btn-primary btn-sm tableButton"';
                 fila += ' onclick = "abrir_modal_edicion(\'/usuarios/actualizar_usuario/' + response[i]['pk']+'/\');"> EDITAR </button>';

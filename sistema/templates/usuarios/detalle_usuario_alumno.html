@@ -22,12 +22,14 @@ Usuario | {{ object }}
                     {% csrf_token %}
                     <div class="card-body">
                         <div class="row">
-                            
                             <div class="col-md-6">
-                                <p class="card-text"><strong>Nombre</strong></p>{{ object.nombre }}
+                                <p class="card-text">Usuario el: {{ object.pk }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="card-text"><strong>Nombre</strong></p>{{ object.nombres }}
                             </div>
                             <div class="col-md-12">
-                                <p class="card-text"><strong>Apellido</strong></p>{{ object.apellido }}
+                                <p class="card-text"><strong>Apellido</strong></p>{{ object.apellidos }}
                             </div>                            
                             <div class="col-md-12">
                                 <p class="card-text"><strong>Email</strong></p>{{ object.email }}
@@ -35,10 +37,10 @@ Usuario | {{ object }}
                         </div>
                     </div>
                 </div>
-                
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-primary btn-lg" ></button>Accion</button>
+                </div>
             </div>
-            <a type="button" class="btn btn-primary" href="{% url 'usuarios:listado_usuario_alumnos' %}">Volver</a>
-            
         </div>
 
     </div>

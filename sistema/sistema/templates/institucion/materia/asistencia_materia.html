@@ -1,0 +1,60 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block titulo %}
+Materia | {{ materia.materia }}
+{% endblock titulo %}
+{% block extra_css %}
+{% endblock extra_css %}
+{% block body %}
+<div class="card">
+    <div class="card-header">
+        <div class="row" style="margin: 30px;">
+            <div class="col-md-12 text-center ">
+                <strong class="card-title">
+                    <h2>Materia: {{ materia.materia }}</h2>
+                </strong>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="card">
+                    {% csrf_token %}
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="card-text"><strong>Materia</strong></p>{{ materia.materia }}
+                            </div>
+                            {% for asistencia in asistencias %}
+                            {% if asistencia.id_materia == materia %}                                                       
+                            <div class="col-md-12">
+                                {% for alumno in alumnos %}
+                                
+                                {% if alumno == asistencia.id_alumno %} 
+                                <p class="card-text"><strong>Alumno</strong></p>{{ asistencia.id_alumno }}
+                                <p class="card-text"><strong>Dia</strong></p>{{ asistencia.dia }}
+                                <p class="card-text"><strong>Asistencia</strong></p>{{ asistencia.asistencia }}
+                                <br><br><br>
+                                {% endif %}
+                                
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <a type="button" class="btn btn-primary" href="{% url 'institucion:inicio_materia' %}">Volver</a>
+             
+        </div>
+
+    </div>
+</div>
+
+
+{% endblock body %}
+{% block extrajs %}
+
+{% endblock extrajs %}

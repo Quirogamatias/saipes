@@ -1,102 +1,64 @@
 {% extends 'index.html' %}
 {% load static %}
-
 {% block titulo %}
-    Listado de Inscripciones Examenes
+listado de alumnos por materia | {{ object }}
 {% endblock titulo %}
-
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'assets/css/lib/datatable/dataTables.bootstrap.min.css' %}">
 {% endblock extra_css %}
-{% load widget_tweaks %}
- {% block body %}  
- <form method="post" action="." enctype="multipart/form-data">   
-    <div class="card card-primary">
-        <div class="card-header">
-            <h3 class="card-title">
-                <i class="fas fa-plus"></i>
-                
-                {{ title }}
-            </h3>
-
+{% block body %}
+<div class="card">
+    <div class="card-header">
+        <div class="row" style="margin: 30px;">
+            <div class="col-md-12 text-center ">
+                <strong class="card-title">
+                    <h2>listado de alumnos por materia: </h2>
+                </strong>
+            </div>
         </div>
-        <div class="card-body">           
-                
-                <div class="form-group">
-                    <label>Materia:</label>
-                    {{ form.materia }}
+        <div class="container">
+            <div class="row">
+                <div class="card">
+                    {% csrf_token %}
+                    <div class="card-body">
+                        <div class="row">            
+                            {% if object_list %}  
+                            {% for materia in object_list %}                           
+                            <p class="card-text"><strong>Materia: </strong></p>{{ materia.id_materia }}                            
+                                {% for inscripcion in object_list %}  
+                                
+                                    {% if inscripcion.id_materia == materia.id_materia %}
+                                    
+                                        <div class="col-md-6">
+                                            <p class="card-text"><strong>alumno</strong></p>{{ inscripcion.id_alumno }}
+                                        </div>  
+                                    {% endif %}
+                                    
+                                {% endfor %}
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Alumno:</label>
-                        {{ form.alumno }}                
-                </div> 
-                
-                
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-primary btn-lg" ></button>Accion</button>
+                </div>
+            </div>
         </div>
 
-    </div> 
-</form> 
+    </div>
+</div>
+
 
 {% endblock body %}
+{% block extrajs %}
+<script>
+    function contado(inscripcion.id_materia){
+  
+        if (inscripcion.id_materia ==)
+        {
+            
+        }
+    }
+</script>
 
- {% block extrajs %}
- <script>
-    $(function(){
-         $('select[name="materia"]').on('change',function(){
-             var id = $(this).val();
-             var select_alumno = $('select[name="alumno"]');
-             var options = '<option value="">------------</option>';
-             if (id === ''){
-                 select_alumno.html(options);
-                 return false;
-             }
-             $.ajax({
-                 url: window.location.pathname,
-                 type:'POST',
-                 data:{
-                     'action': 'search_materia_id',
-                     'id': id
-                    
-                 },
-                 dataType: 'json',          
-             }).done(function (data){  
-                /*console.log(data); */              
-                 
-                 if (!data.hasOwnProperty("'error'")){
-                    console.log(data)
-                     /* me funcion cuando puse "'error'" en vez de 'error'*/
-                    
-                     $.each(data, function (key,value){ 
-                        
-                        /*console.log(value)  
-                        alert(value)   */  
-                              
-                         options+='<option value="'+value.id_alumno+'">'+value.apellido +" "+ value.nombre+'</option>';
-                        
-                     });
-                     return false;                
-                 }
-                 
-                 
-                 message_error(data.error);
-             }).fail(function(jqXHR,textStatus,errorThrown){
-                 alert(textStatus + ':'+errorThrown);
-             }).always(function (data){ 
-                               
-                 select_alumno.html(options);
-                 
-                 
-             });
-
-             
-         });
-
-         
-     }); 
-         
-         
- </script>
- <script src="{% static 'assets/js/lib/data-table/datatables.min.js' %}"></script>
- <script src="{% static 'assets/js/lib/data-table/datatables.bootstrap.min.js' %}"></script>
- <script src="{% static 'assets/js/institucion/inscripcionexamen.js' %}"></script>
- {% endblock extrajs %}
+{% endblock extrajs %}

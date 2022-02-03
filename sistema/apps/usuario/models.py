@@ -48,11 +48,11 @@ class Rol(models.Model):
                 super().save(*args,**kwargs)
 
 class UsuarioManager(BaseUserManager):
-    def _create_user(self, username, email, nombre, password, is_staff, is_superuser, **extra_fields):
+    def _create_user(self, username, email, nombres, password, is_staff, is_superuser, **extra_fields):
         user = self.model(
             username=username,
             email=email,
-            nombre=nombre,
+            nombres=nombres,
             is_staff=is_staff,
             is_superuser=is_superuser,
             **extra_fields
@@ -61,19 +61,19 @@ class UsuarioManager(BaseUserManager):
         user.save(using=self.db)
         return user
 
-    def create_user(self, username, email, nombre, is_staff, password=None, **extra_fields):
-        return self._create_user(username, email, nombre, password, is_staff, False, **extra_fields)
+    def create_user(self, username, email, nombres, is_staff, password=None, **extra_fields):
+        return self._create_user(username, email, nombres, password, is_staff, False, **extra_fields)
     
-    def create_superuser(self,username,email,nombre,password = None,**extra_fields):
-        return self._create_user(username, email, nombre, password, True, True, **extra_fields)
+    def create_superuser(self,username,email,nombres,password = None,**extra_fields):
+        return self._create_user(username, email, nombres, password, True, True, **extra_fields)
 
 
 
 class Usuario(AbstractBaseUser,PermissionsMixin):
     username = models.CharField('Nombre de usuario', unique=True, max_length=100)
     email = models.EmailField('Correo Electronico', max_length=254,unique=True)
-    nombre = models.CharField('Nombre',max_length=200, blank=True,null=True)
-    apellido = models.CharField('Apellido', max_length=200, blank=True,null=True)
+    nombres = models.CharField('Nombres',max_length=200, blank=True,null=True)
+    apellidos = models.CharField('Apellidos', max_length=200, blank=True,null=True)
     #rol = models.ForeignKey(Rol, on_delete=models.CASCADE,blank = True,null = True)
     tipos = (
         ('Alumno', 'Alumno'),
@@ -87,7 +87,7 @@ class Usuario(AbstractBaseUser,PermissionsMixin):
     objects = UsuarioManager()
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email','nombre','apellido']
+    REQUIRED_FIELDS = ['email','nombres','apellidos']
 
     class Meta:
         permissions = [('permiso_desde_codigo','Este es un permiso creado desde codigo'),
@@ -95,7 +95,7 @@ class Usuario(AbstractBaseUser,PermissionsMixin):
 
     def __str__(self):
         #return self.nombres,self.apellidos
-        return f'{self.apellido},{self.nombre}'
+        return f'{self.apellidos},{self.nombres}'
         
     """def save(self,*args,**kwargs):
         if not self.id:
