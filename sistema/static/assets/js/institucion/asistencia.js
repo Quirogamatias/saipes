@@ -107,7 +107,7 @@ function eliminar(pk){
         data: {
             csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
         },
-		url: '/institucion/asistencia/eliminar_asistencia/'+pk+'/',
+		url: '/institucion/eliminar_asistencia/'+pk+'/',
 		type: 'post',
 		success: function(response) {
             notificacionSuccess(response.mensaje);

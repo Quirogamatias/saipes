@@ -153,21 +153,22 @@ class EliminarUsuario(LoginYSuperStaffMixin, ValidarPermisosMixin, DeleteView):
 
 class ListadoUsuarioAlumno(LoginMixin,ListView):
     model = Usuario
-    paginate_by = 6
+    paginate_by = 12
+    second_model=Alumno
     permission_required = ('usuario.view_usuario', 'usuario.add_usuario',
                            'usuario.delete_usuario', 'usuario.change_usuario')
 
     #paginate_by = 6
     template_name = 'usuarios/usuarios_alumno.html'
-
-    def get_queryset(self):
+    
+    def get_queryset(self):        
         queryset = self.model.objects.filter(is_active = True,tipo__icontains = 'Alumno')
         return queryset 
 
 class DetalleUsuarioAlumno(LoginMixin,DetailView):
     model = Usuario
     template_name = 'usuarios/detalle_usuario_alumno.html'
-
+    #falta poner al boton que pueda enviar un mensaje desde el correo del profesor 
     """def get(self,request,*agrs,**kwargs):
         if self.get_object().tipo__icontains = 'Alumno':
             return render(request,self.template_name,{'object':self.get_object()})
