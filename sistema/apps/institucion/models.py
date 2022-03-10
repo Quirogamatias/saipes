@@ -439,3 +439,46 @@ class InscripcionProfesor(models.Model):
     def obtener_materia(self):
         materias = str([Materia for Materia in self.id_materia.all().values_list('materia',flat = True)]).replace("[","").replace("]","").replace("'","")
         return materias
+
+class Pregunta(models.Model):
+    id_pregunta = models.AutoField(primary_key= True)
+    asunto = models.CharField(max_length=200)
+    descripcion = models.TextField()
+    fecha_publicacion = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Pregunta'
+        verbose_name_plural = 'Preguntas'
+        ordering = ['id_pregunta']
+    
+    def __str__(self):
+        #return str(self.id_pregunta)
+        return self.asunto
+       # return f'Asunto {self.asunto}'
+    
+    def publicado_hoy(self):
+        return self.fecha_publicacion.date() == timezone.now().date()
+    publicado_hoy.boolean = True
+    publicado_hoy.descripcion_corta = '¿Preguntado Hoy?'
+
+class Respuesta(models.Model):
+    id_respuesta = models.AutoField(primary_key= True)
+    id_pregunta= models.ForeignKey(Pregunta, on_delete = models.CASCADE)
+    id_usuario = models.ForeignKey(Usuario, on_delete = models.CASCADE, null=True, blank = True)
+    contenido = models.TextField()
+    mejor_respuesta = models.BooleanField("Respuesta Preferida", default=False)
+
+    def natural_key(self):
+        return f'Pregunta {self.asunto}, Respuesta {self.contenido}'
+   
+    #def natural_key(self):
+     #   return self.contenido
+    class Meta:
+        verbose_name = 'Respuesta'
+        verbose_name_plural = 'Respuestas'
+        ordering = ['id_respuesta']
+
+    def __str__(self):
+        return f'Pregunta {self.id_pregunta}, Respuesta {self.contenido}'
+   
+   

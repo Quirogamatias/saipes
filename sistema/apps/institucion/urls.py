@@ -17,6 +17,9 @@ urlpatterns = [
     path('inicio_administrador/',InicioAdministrador.as_view(), name = 'inicio_administrador'),
     #path('inicio_administradores/',InicioAdministradores.as_view(), name = 'inicio_administradores'),
     path('inicio_curso/',InicioCurso.as_view(), name = 'inicio_curso'),
+    path('inicio_respuesta/',InicioRespuesta.as_view(), name = 'inicio_respuesta'),
+    path('inicio_respuesta_admin/',InicioRespuestaAdmin.as_view(), name = 'inicio_respuesta_admin'),
+    path('inicio_encuesta/',InicioEncuesta.as_view(), name = 'inicio_encuesta'),
     path('inicio_alumno/',InicioAlumno.as_view(), name = 'inicio_alumno'),
     path('inicio_alumnop/',InicioAlumnop.as_view(), name = 'inicio_alumnop'),
     path('inicio_alumnos/',InicioAlumnos.as_view(), name = 'inicio_alumnos'),
@@ -43,6 +46,9 @@ urlpatterns = [
     path('Inicio_PromedioAsistenciaAlumno/',InicioPromedioAsistenciaAlumno.as_view(), name = 'Inicio_PromedioAsistenciaAlumno'),
 
     path('crear_curso/',login_required(CrearCurso.as_view()), name = 'crear_curso'),
+    path('responder_pregunta/',login_required(Responder_Pregunta.as_view()), name = 'responder_pregunta'),
+    path('crear_encuesta/',login_required(CrearEncuesta.as_view()), name = 'crear_encuesta'),
+    path('pregunta_crear/',login_required(Pregunta_Crear), name = 'pregunta_crear'),
     path('crear_horario/',login_required(CrearHorario.as_view()), name = 'crear_horario'),
     path('crear_alumno/',login_required(CrearAlumno.as_view()), name = 'crear_alumno'),
     path('crear_inscripcion/',login_required(CrearInscripcion.as_view()), name = 'crear_inscripcion'),
@@ -59,6 +65,9 @@ urlpatterns = [
     path('crear_fecha/',login_required(CrearFecha.as_view()), name = 'crear_fecha'),
     
     path('listar_cursos/',login_required(ListadoCursos.as_view()),name = 'listado_cursos'),
+    path('listar_preguntas_alumno/',login_required(ListadoPreguntasAlumno.as_view()),name = 'listar_preguntas_alumno'),
+    path('listar_respuestas/',login_required(ListadoRespuestas.as_view()),name = 'listar_respuestas'),
+    path('listar_preguntas/',login_required(Listar_Preguntas),name = 'listar_preguntas'),
     path('listar_horarios/',login_required(ListadoHorarios.as_view()),name = 'listado_horarios'),
     path('listar_horariot/',login_required(ListadoHorariost.as_view()),name = 'listado_horariot'),
     path('listar_alumnos/',login_required(ListadoAlumnos.as_view()),name = 'listado_alumnos'),
@@ -91,6 +100,8 @@ urlpatterns = [
     #path('listar_promediosp2/',login_required(ListadoPromedioNotasParcial2),name = 'listado_promediosp2'),
    
     path('editar_curso/<int:pk>/',login_required(ActualizarCurso.as_view()),name = 'editar_curso'),
+    path('pregunta_editar/<int:pk>/',login_required(Pregunta_Editar),name = 'pregunta_editar'),
+    path('respuesta_editar/<int:pk>/',login_required(Respuesta_editar.as_view()),name = 'respuesta_editar'),
     path('editar_horario/<int:pk>/',login_required(ActualizarHorario.as_view()),name = 'editar_horario'),
     path('editar_alumno/<int:pk>/',login_required(ActualizarAlumno.as_view()),name = 'editar_alumno'),
     path('editar_alumno2/<int:pk>/',login_required(ActualizarAlumno2.as_view()),name = 'editar_alumno2'),
@@ -124,6 +135,8 @@ urlpatterns = [
     path('eliminar_inscripcion_examen_alumno/<int:pk>/',login_required(EliminarInscripcionExamenAlumno.as_view()),name = 'eliminar_inscripcion_examen_alumno'),
     
     path('detalle_carrera/<int:pk>/',login_required(DetalleCarrera.as_view()), name = 'detalle_carrera'),
+    path('pregunta_detalle/<int:pk>/',login_required(Pregunta_Detalle), name = 'pregunta_detalle'),
+    path('responder_pregunta/<int:pk>/',login_required(Responder_Pregunta), name = 'responder_pregunta'),
     path('listar_materia_alumno/',login_required(ListadoMateriaAlumno.as_view()),name = 'listar_materia_alumno'),
     path('detalle_materia/<int:pk>/',login_required(DetalleMateria.as_view()), name = 'detalle_materia'),
     path('detalle_materia_alumno/<int:pk>/',login_required(DetalleMateriaAlumno.as_view()), name = 'detalle_materia_alumno'),

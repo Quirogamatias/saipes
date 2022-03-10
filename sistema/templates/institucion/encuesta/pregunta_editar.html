@@ -1,0 +1,28 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block titulo %}
+    editar de Pregunta
+{% endblock titulo %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'assets/css/lib/datatable/dataTables.bootstrap.min.css' %}">
+{% endblock extra_css %}
+
+{% block body %}  
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-8">
+                <strong class="card-title">Editar Pregunta</strong>
+            </div>                
+        </div>        
+    </div>
+        <form action="" method="POST"> 
+            {% csrf_token %} 
+            {{ form.as_p }}
+            <input type="submit" value="Enviar">
+            
+        </form>
+</div>  
+{% endblock body %}

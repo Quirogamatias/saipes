@@ -5,6 +5,82 @@ from .models import *
 from apps.usuario.models import Usuario
 #import InscripcionExamenAlumnoForm.request
 
+class RespuestaForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['id_pregunta'].queryset = Pregunta.objects.all()
+
+    class Meta:
+        model = Respuesta
+        fields = ['id_pregunta','contenido']
+        labels = {
+            'id_pregunta': 'id de la pregunta',
+            'contenido': 'contenido de la respuesta',
+        }
+        widgets = {
+            'id_pregunta': forms.Select(
+                attrs = {
+                    'class':'form-control'
+                }
+            ),
+            'contenido': forms.TextInput(
+                attrs = {
+                    'class':'form-control',
+                    'placeholder':'Ingrese la respuesta'
+                }
+            )
+        }
+class RespuestaAdminForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['id_pregunta'].queryset = Pregunta.objects.all()
+
+    class Meta:
+        model = Respuesta
+        fields = ['id_pregunta','contenido','mejor_respuesta']
+        labels = {
+            'id_pregunta': 'id de la pregunta',
+            'contenido': 'contenido de la respuesta',
+            'mejor_respuesta': 'mejor respuesta de la pregunta',
+        }
+        widgets = {
+            'id_pregunta': forms.TextInput(
+                attrs = {
+                    'class':'form-control',
+                    'readonly':'readonly'
+                }
+            ),
+            'contenido': forms.TextInput(
+                attrs = {
+                    'class':'form-control',
+                    'readonly':'readonly'
+                }
+            )
+        }
+
+                    
+class PreguntaForm(forms.ModelForm):
+    class Meta:
+        model = Pregunta
+        fields = ['asunto','descripcion']
+        labels = {
+            'asunto': 'asunto de la pregunta',
+            'descripcion': 'descripcion de la pregunta',
+        }
+        widgets = {
+            'asunto': forms.TextInput(
+                attrs = {
+                    'class':'form-control',
+                    'placeholder':'Ingrese el asunto de la pregunta'
+                }
+            ),
+            'descripcion': forms.TextInput(
+                attrs = {
+                    'class':'form-control',
+                    'placeholder':'Ingrese la descripcion de la pregunta'
+                }
+            )
+        }
 class CursoForm(forms.ModelForm):
     class Meta:
         model = Curso

@@ -18,10 +18,31 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 import datetime
+from django.template import RequestContext
 
-
+#. Listar estado del profesor (materias que imparte, mesas de examen que tiene el profesor, horarios, notificaciones)
+# realizar encuestas de acuerdo a la carrer(para mejorar espectos de carrera)
+#responder encuesta
+#me falta hacer el promedio total del alumno por carrera, juntando todas las notas de las materias que cursa
+#notificacion al profesor(nose que falta de esto)
 class Inicio(TemplateView):
     template_name = 'index.html'
+
+class InicioEncuesta(ValidarAdministrador, TemplateView):
+    template_name = 'institucion/encuesta/encuesta.html'
+    permission_required = ('institucion.view_administrador', 'institucion.add_administrador',
+                           'institucion.delete_administrador', 'institucion.change_administrador')
+
+class InicioRespuesta(LoginYSuperStaffMixin, TemplateView):
+    template_name = 'institucion/encuesta/listar_preguntas_alumno.html'
+    permission_required = ('institucion.view_respuesta', 'institucion.add_respuesta',
+                           'institucion.delete_respuesta', 'institucion.change_respuesta')
+
+class InicioRespuestaAdmin(LoginYSuperStaffMixin, TemplateView):
+    template_name = 'institucion/encuesta/listar_respuestas.html'
+    permission_required = ('institucion.view_respuesta', 'institucion.add_respuesta',
+                           'institucion.delete_respuesta', 'institucion.change_respuesta')
+
 
 class InicioAdministrador(ValidarAdministrador, TemplateView):
     template_name = 'institucion/administrador/listar_administrador.html'
@@ -1365,17 +1386,17 @@ class EliminarAdministrador(ValidarAdministrador,DeleteView):
 
 class ListadoProfesores(ValidarAdministrador,ListView):
     model = Profesor
+    #second_model = InscripcionProfesor
+    #third_model = Materia
+    #form_class = ProfesorForm
+    #second_form_class = InscripcionProfesorForm
     permission_required = ('institucion.view_profesor', 'institucion.add_profesor',
                            'institucion.delete_profesor', 'institucion.change_profesor')  
+    
 
     def get_queryset(self):
         return self.model.objects.filter(estado = True)  
 
-    def get_context_data(self,**kwargs):
-        contexto= {}
-        contexto ['profesores'] = self.get_queryset()
-        contexto['form'] = self.form_class
-        return contexto
     
     def get(self,request,*args,**kwargs):
         if request.is_ajax():            
@@ -2261,6 +2282,7 @@ class CrearNotas(ValidarProfesor,CreateView):
         else:
             return  redirect ( 'institucion: inicio_notas' )
 
+#hice una prueba y no me guardo el crear nortasp
 class CrearNotasP(ValidarProfesor,CreateView):
     model = Notas
     second_model = PromedioNotasFinal
@@ -4186,5 +4208,241 @@ class TestView(LoginYSuperStaffMixin, ValidarPermisosMixin,TemplateView):
         context['title']='Select animado | Django'
         context['form'] = TestForm()#self.TestForm()#self.TestForm(form)#self.TestForm()#self.form_class 
         return context
-    
 
+
+class CrearEncuesta(ValidarProfesor,ListView):
+    model = PromedioNotasParcial
+    permission_required = ('institucion.view_promedionotasparcial', 'institucion.add_promedionotasparcial',
+                           'institucion.delete_promedionotasparcial', 'institucion.change_promedionotasparcial')
+    #queryset = PromedioNotasParcial.objects.order_by('-id_promedionotasparcial')
+    #def post(self,request,*args,**kwargs):   
+     #   promedioP = self.model.objects.all()
+      #  promedioPa = self.model.objects.all()
+
+        #author_count = self.model.objects.count()
+        #cut_off_score = self.model.objects.order_by('-total').values_list('total')[min(30, author_count)]
+        #top_authors = self.model.objects.filter(total__gte=cut_off_score).order_by('total')
+      
+    def get_queryset(self):
+        return self.model.objects.filter(estado = True) 
+
+    def get_context_data(self,**kwargs):
+        #orden = PromedioNotasParcial.objects.all().order_by('total')
+        #return redirect('institucion:InicioPromedioNotasParcial',{"PromedioNotasParcial": orden})
+
+        contexto= {}
+        contexto ['promedionotasparciales'] = self.get_queryset() #agregamos la consulta al contexto
+        contexto['form'] = self.form_class
+        return contexto
+    
+    def get(self,request,*args,**kwargs):
+        if request.is_ajax():            
+            return HttpResponse(serialize('json',self.get_queryset()), 'application/json')
+        else:
+            return redirect('institucion:InicioPromedioNotasParcial')
+
+def Listar_Preguntas(request):
+    preguntas = Pregunta.objects.all()
+    return render(request,'institucion/encuesta/listar_preguntas.html',{'preguntas':preguntas})
+
+    #return render('institucion/encuesta/listar_preguntas.html',{'preguntas':preguntas})
+    #respuesta_string = "preguntas <br/>"
+    #respuesta_string += '<br/>'.join(["id: %s, asunto: %s"%(p.id, p.asunto) for p in preguntas])
+    #return HttpResponse(respuesta_string)
+
+def Pregunta_Detalle(request,pk):
+    preguntas = Pregunta.objects.get(pk=pk)
+    return render(request,'institucion/encuesta/pregunta_detalle.html',{'preguntas':preguntas})
+
+    #return HttpResponse("%s"% pregunta.asunto)
+
+    #def get_context_data(self,**kwargs):
+     #   contexto= {}
+      #  contexto ['alumnos'] = self.get_queryset()
+       # contexto['form'] = self.form_class
+        #return contexto
+    
+    
+def Pregunta_Crear(request):
+    if request.method == 'POST':
+        form = PreguntaForm(request.POST)
+        if form.is_valid():            
+            form.save()
+            return redirect('institucion:listar_preguntas')
+            #return redirect('preguntas')
+    else:
+        form = PreguntaForm
+        context = {'form': form}
+    return render(request,'institucion/encuesta/pregunta_crear.html',context)
+
+def Pregunta_Editar(request, pk):
+    pregunta = Pregunta.objects.get(pk=pk)
+    if request.method=='POST':
+        #form = self.form_class(request.POST,instance = self.get_object())
+        form = PreguntaForm(request.POST, instance=pregunta)
+        if form.is_valid():
+            form.save()
+            return redirect('institucion:pregunta_detalle',pk)
+    else:
+        form = PreguntaForm(instance=pregunta)
+        context = {'form': form}
+    return render(request,'institucion/encuesta/pregunta_editar.html',context)
+
+#def Listar_Preguntas_Alumno(request):
+ #   preguntas = Pregunta.objects.all()
+  #  return render(request,'institucion/encuesta/listar_preguntas_alumno.html',{'preguntas':preguntas})
+
+
+    
+#es mej0or hacer un respuesta crear, y elegir la pregunta que quiera, para eso tegno que hacer toda el static y hacer un crear solamente como los demas
+
+#def Responder_Pregunta(request, pk):
+ #   preguntas = Pregunta.objects.get(pk=pk)    
+  #  contexto= {}
+    
+   # contexto ['preguntas'] = preguntas
+    #contexto['form'] = RespuestaForm
+    #return render(request,'institucion/encuesta/responder_pregunta.html',contexto)
+#falta hacer, que cada usuario conteste cada pregunta
+#sin la restriccion de que cada pregunta solo tiene un usuario
+class Responder_Pregunta(LoginYSuperStaffMixin,CreateView):
+    model = Respuesta
+    form_class = RespuestaForm
+    #second_model = Pregunta
+    #third_model = Alumno
+    template_name = 'institucion/encuesta/responder_pregunta.html'
+
+    @method_decorator(csrf_exempt)
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+
+    def post(self,request,*args,**kwargs):
+        a=0
+        if request.is_ajax():
+            form = self.form_class(data = request.POST,files = request.FILES)
+            if form.is_valid():  
+                #alumno=self.fifth_model.objects.filter(id_usuario=self.request.user,estado = True)             
+                nuevo= Respuesta(
+                    id_pregunta= form.cleaned_data.get('id_pregunta'),
+                    id_usuario=self.request.user,
+                    contenido=form.cleaned_data.get('contenido')       
+                )
+                respuesta = self.model.objects.filter(id_usuario=self.request.user) 
+                
+                for k in range(len(respuesta)):
+                    if respuesta[k].id_pregunta == nuevo.id_pregunta:
+                        mensaje = f'{self.model.__name__} no se ha podido responder, porque ya contesto esta pregunta!'
+                        error = form.errors
+                        response = JsonResponse({'mensaje':mensaje,'error':error})
+                        response.status_code = 400
+                        return response                          
+                                        
+                if a==0:
+                    nuevo.save()
+                    mensaje = f'{self.model.__name__} Pregunta respondida correctamente!'
+                    error = 'No hay error!'
+                    response = JsonResponse({'mensaje':mensaje,'error':error})
+                    response.status_code = 201
+                    return response
+            else:
+                mensaje = f'{self.model.__name__} no se ha podido responder!'
+                error = form.errors
+                response = JsonResponse({'mensaje':mensaje,'error':error})
+                response.status_code = 400
+                return response
+        else:
+            return  redirect ( 'institucion: inicio_respuesta' )
+
+class ListadoPreguntasAlumno(LoginYSuperStaffMixin,ListView):
+    model = Respuesta   
+    permission_required = ('institucion.view_respuesta', 'institucion.add_respuesta',
+                           'institucion.delete_respuesta', 'institucion.change_respuesta')
+
+    def get_queryset(self):
+        return self.model.objects.filter(id_usuario=self.request.user)  
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            return HttpResponse(serialize('json', self.get_queryset(),use_natural_foreign_keys = True), 'application/json')
+        else:
+            return redirect('institucion:inicio_respuesta')
+#falta hacer que muestre la respuestas elegida de la pregunta, eso solo con el administrador, tambien podria hacer un listado de respuestas de cada pregunta
+#puedo hacer un boton dentro del listar, poniendo mejor respuesta(de cada pregunta)
+class ListadoRespuestas(LoginYSuperStaffMixin,ListView):
+    model = Respuesta   
+    permission_required = ('institucion.view_respuesta', 'institucion.add_respuesta',
+                           'institucion.delete_respuesta', 'institucion.change_respuesta')
+
+    #def get_queryset(self):
+     #   return self.model.objects.filter(id_usuario=self.request.user)  
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            return HttpResponse(serialize('json', self.get_queryset(),use_natural_foreign_keys = True), 'application/json')
+        else:
+            return redirect('institucion:inicio_respuesta_admin')
+
+#hice un boton para que me muestre el listado de respuestas cuando vea el detalle de preguntas
+#prodria ahcer que me muestre solo las respuestas de esa pregunta en el listar
+class Respuesta_editar(ValidarAdministrador,UpdateView):
+    model = Respuesta
+    form_class = RespuestaAdminForm
+    template_name = 'institucion/encuesta/respuesta_editar.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(Respuesta_editar, self).get_context_data(**kwargs)
+        if 'form' not in context:
+            context['form'] = self.form_class(self.request.GET)
+        return context
+
+    def post(self,request,*args,**kwargs):
+        if request.is_ajax():
+            form = self.form_class(data = request.POST,files = request.FILES,instance = self.get_object())
+            if form.is_valid():
+                nuevo= Respuesta(
+                    id_pregunta= form.cleaned_data.get('id_pregunta'),
+                    id_usuario=self.request.user,
+                    contenido=form.cleaned_data.get('contenido'),
+                    mejor_respuesta=form.cleaned_data.get('mejor_respuesta')   
+                )
+                respuesta = self.model.objects.all() 
+                for k in range(len(respuesta)):
+                    
+                    if respuesta[k].id_pregunta == nuevo.id_pregunta:
+                        if nuevo.mejor_respuesta == False:
+                            form.save()
+                            mensaje = f'{self.model.__name__} no se hicieron cambios!'
+                            error = 'No hay error!'
+                            response = JsonResponse({'mensaje':mensaje,'error':error})
+                            response.status_code = 201
+                            return response
+                    
+                        if respuesta[k].mejor_respuesta == True:
+                            print(respuesta[k].id_pregunta)
+                            print(nuevo.id_pregunta)
+                            mensaje = f'{self.model.__name__} no se ha podido Guardar, porque ya existe una mejor respuesta!'
+                            error = form.errors
+                            response = JsonResponse({'mensaje':mensaje,'error':error})
+                            response.status_code = 400
+                            return response 
+                        if respuesta[k].mejor_respuesta == False and nuevo.mejor_respuesta == True:
+                            form.save()
+                            mensaje = f'{self.model.__name__} actualizado correctamente!'
+                            error = 'No hay error!'
+                            response = JsonResponse({'mensaje':mensaje,'error':error})
+                            response.status_code = 201
+                            return response
+                                
+            else:
+                mensaje = f'{self.model.__name__} no se ha podido actualizar!'
+                error = form.errors
+                response = JsonResponse({'mensaje':mensaje,'error':error})
+                response.status_code = 400
+                return response
+        else: 
+            return redirect('institucion:inicio_respuesta_admin')
+
+
+   

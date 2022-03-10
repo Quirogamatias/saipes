@@ -1,0 +1,44 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block titulo %}
+    Detalle de Pregunta
+{% endblock titulo %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'assets/css/lib/datatable/dataTables.bootstrap.min.css' %}">
+{% endblock extra_css %}
+
+{% block body %}  
+        <h2>{{ preguntas.asunto }}?</h2>
+        <p><a class = "btn btn-info tableButton btn-sm" href="{% url 'institucion:pregunta_editar' preguntas.id_pregunta %}">Editar esta Pregunta </a></p>
+        <p><b>Publicado:</b> {{ preguntas.fecha_publicacion|date:"D d M Y" }}</p>
+        <p>
+            {% if preguntas.descripcion %}
+                {{ preguntas.descripcion }}
+            {% else %}
+                No se ha incluido descripcion
+            {% endif %}
+        </p>
+        <h3>Mejor Respuestas:</h3>
+        <ul>
+            {% for respuesta in preguntas.respuesta_set.all %}
+                {% if  respuesta.mejor_respuesta == True %}
+                <li>{{ respuesta.contenido|safe }}</li>
+                {% endif %}                
+            {% empty %}
+                <li>Aun no hay mejor respuestas</li>
+            {% endfor %}
+        </ul>
+        _______________________________
+        <a href="{% url 'institucion:inicio_respuesta_admin' %}">
+        <h3>Todas las Respuestas:</h3>        
+        <ul>
+            {% for respuesta in preguntas.respuesta_set.all %}
+                <li>{{ respuesta.contenido|safe }}</li>
+            {% empty %}
+                <li>Aun no hay respuestas</li>
+            {% endfor %}
+        </ul>
+        </a>
+{% endblock body %}

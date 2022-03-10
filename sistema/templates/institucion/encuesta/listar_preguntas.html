@@ -1,0 +1,33 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block titulo %}
+    Listado de Preguntas
+{% endblock titulo %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'assets/css/lib/datatable/dataTables.bootstrap.min.css' %}">
+{% endblock extra_css %}
+
+{% block body %}  
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <h2>
+                <div class="col-md-8">
+                    <strong class="card-title">Listado de Pregunta</strong>
+                </div>  
+            </h2>              
+            </div>
+            <a class = "btn btn-info tableButton btn-sm" href="{% url 'institucion:pregunta_crear' %}">crear Pregunta</a>
+    
+        </div>
+            <h3>
+            {% for pregunta in preguntas %}
+            <a href="{% url 'institucion:pregunta_detalle' pregunta.id_pregunta %}">{{ pregunta.asunto }} </a><br/>
+            {% endfor %}
+            </h3>
+    </div>  
+
+    
+{% endblock body %}
