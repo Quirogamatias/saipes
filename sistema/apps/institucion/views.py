@@ -4384,8 +4384,7 @@ class ListadoRespuestas(LoginYSuperStaffMixin,ListView):
         else:
             return redirect('institucion:inicio_respuesta_admin')
 
-#hice un boton para que me muestre el listado de respuestas cuando vea el detalle de preguntas
-#prodria ahcer que me muestre solo las respuestas de esa pregunta en el listar
+
 class Respuesta_editar(ValidarAdministrador,UpdateView):
     model = Respuesta
     form_class = RespuestaAdminForm
@@ -4408,8 +4407,7 @@ class Respuesta_editar(ValidarAdministrador,UpdateView):
                     mejor_respuesta=form.cleaned_data.get('mejor_respuesta')   
                 )
                 respuesta = self.model.objects.all() 
-                for k in range(len(respuesta)):
-                    
+                for k in range(len(respuesta)):                    
                     if respuesta[k].id_pregunta == nuevo.id_pregunta:
                         if nuevo.mejor_respuesta == False:
                             form.save()
@@ -4445,4 +4443,7 @@ class Respuesta_editar(ValidarAdministrador,UpdateView):
             return redirect('institucion:inicio_respuesta_admin')
 
 
-   
+def Listado_Respuestas(request,pk):
+    preguntas = Pregunta.objects.get(pk=pk)
+    return render(request,'institucion/encuesta/listado_respuestas.html',{'preguntas':preguntas})
+

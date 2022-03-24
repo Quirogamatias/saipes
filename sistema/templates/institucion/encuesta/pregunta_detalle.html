@@ -31,7 +31,7 @@
             {% endfor %}
         </ul>
         _______________________________
-        <a href="{% url 'institucion:inicio_respuesta_admin' %}">
+        <a href="{% url 'institucion:listado_respuestas' preguntas.id_pregunta %}">
         <h3>Todas las Respuestas:</h3>        
         <ul>
             {% for respuesta in preguntas.respuesta_set.all %}
@@ -41,4 +41,5 @@
             {% endfor %}
         </ul>
         </a>
+        <a type="button" class="btn btn-primary" href="{% url 'institucion:listar_preguntas'  %}">Volver</a>
 {% endblock body %}

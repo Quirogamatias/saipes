@@ -16,7 +16,8 @@ from .forms import FormularioLogin,FormularioUsuario
 from apps.usuario.mixins import LoginYSuperStaffMixin,ValidarPermisosMixin,LoginMixin
 from apps.institucion.models import Fecha
 
-class Inicio(LoginYSuperStaffMixin,TemplateView):
+#class Inicio(LoginYSuperStaffMixin,TemplateView): antes no me dejaba iniciar desde el login y tenia que ir al admin para iniciar el usuario
+class Inicio(LoginRequiredMixin,TemplateView):
     #clase que renderiza el index del sistema
     template_name = 'index.html'
     groups_required = ['alumno','administrador','profesor']

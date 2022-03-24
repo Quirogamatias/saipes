@@ -1,0 +1,28 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block titulo %}
+    Listado de preguntas respondidas
+{% endblock titulo %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'assets/css/lib/datatable/dataTables.bootstrap.min.css' %}">
+{% endblock extra_css %}
+
+ {% block body %}     
+ <h3>Todas las Respuestas: de {{ preguntas.asunto }}?</h3>        
+ <ul>
+     {% for respuesta in preguntas.respuesta_set.all %}
+     <li>Alumno: {{ respuesta.id_usuario|safe }} - Respuesta: {{ respuesta.contenido|safe }}</li>
+     {% empty %}
+         <li>Aun no hay respuestas</li>
+     {% endfor %}
+ </ul>
+ <a type="button" class="btn btn-primary" href="{% url 'institucion:pregunta_detalle' preguntas.id_pregunta %}">Volver</a>
+{% endblock body %}
+
+ {% block extrajs %}
+ <script src="{% static 'assets/js/lib/data-table/datatables.min.js' %}"></script>
+ <script src="{% static 'assets/js/lib/data-table/datatables.bootstrap.min.js' %}"></script>
+ <script src="{% static 'assets/js/institucion/respuesta.js' %}"></script>
+ {% endblock extrajs %}

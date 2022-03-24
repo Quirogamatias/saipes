@@ -136,6 +136,7 @@ urlpatterns = [
     
     path('detalle_carrera/<int:pk>/',login_required(DetalleCarrera.as_view()), name = 'detalle_carrera'),
     path('pregunta_detalle/<int:pk>/',login_required(Pregunta_Detalle), name = 'pregunta_detalle'),
+    path('listado_respuestas/<int:pk>/',login_required(Listado_Respuestas), name = 'listado_respuestas'),
     path('responder_pregunta/<int:pk>/',login_required(Responder_Pregunta), name = 'responder_pregunta'),
     path('listar_materia_alumno/',login_required(ListadoMateriaAlumno.as_view()),name = 'listar_materia_alumno'),
     path('detalle_materia/<int:pk>/',login_required(DetalleMateria.as_view()), name = 'detalle_materia'),
