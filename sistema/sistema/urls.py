@@ -20,7 +20,7 @@ from django.urls import path,include,re_path
 from django.contrib.auth.decorators import login_required
 from apps.usuario.views import Inicio,Login,logoutUsuario
 
-#from django.conf.urls.static import static
+from django.conf.urls.static import static
 
 
 urlpatterns = [
@@ -31,7 +31,7 @@ urlpatterns = [
     path('accounts/login/',Login.as_view(), name= 'login'),
     path('logout/',login_required(logoutUsuario),name= 'logout'),
     
-]#+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns += [
     re_path(r'^media/(?P<path>.*)$', serve, {
